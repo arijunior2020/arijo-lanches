@@ -152,14 +152,14 @@ async function verificarStatusPagamento() {
           alert("Pagamento confirmado! Obrigado pelo pedido.");
           sessionStorage.removeItem("preferenceId");
           clearInterval(intervaloVerificacao); // Limpa o intervalo global
-          window.location.href = "/success";
+          window.location.href = "/success.html";
       } else if (data.status === "pending") {
           console.log("Pagamento ainda pendente, verificando novamente...");
       } else if (data.status === "rejected") {
           alert("Pagamento foi rejeitado. Tente novamente.");
           sessionStorage.removeItem("preferenceId");
           clearInterval(intervaloVerificacao); // Limpa o intervalo global
-          window.location.href = "/failure";
+          window.location.href = "/failure.html";
       } else {
           console.warn("Status desconhecido:", data.status);
       }
