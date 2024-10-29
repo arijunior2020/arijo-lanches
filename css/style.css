@@ -104,6 +104,7 @@ header {
 .dropdown-menu li a {
     text-decoration: none;
     color: #333;
+    font-weight: 600;
 }
 
 /* Exibir o menu quando ativado */
@@ -200,15 +201,67 @@ header h1, header p {
     z-index: 1000;
 }
 
-.modal-confirmacao {
-    background-color: #C83A31;
-    color: white;
-    border-radius: 9px;
-    padding: 20px;
-    width: 300px;
-}
-
 .modal-conteudo {
     text-align: center;
     color: white;
+}
+
+/* Estilo para o título do modal com ícone */
+.confirmar-texto {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    color: #fff;
+    gap: 10px;
+}
+
+.icon-check {
+    font-size: 1.5em;
+    color: #32B72F; /* Ícone de cor verde */
+}
+
+/* Linha divisora no modal */
+.modal-divider {
+    border: none;
+    border-top: 1px solid #fff;
+    margin: 10px 0;
+    opacity: 0.6;
+}
+
+/* Estilos dos botões do modal */
+.confirmar, .cancelar {
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.confirmar {
+    background-color: #32B72F;
+    color: white;
+}
+
+.cancelar {
+    background-color: #b5b5b5;
+    color: white;
+}
+
+.icon {
+    font-size: 1.2em;
+}
+
+/* Sombra e bordas arredondadas para o modal */
+.modal-confirmacao {
+    background-color: #C83A31;
+    border-radius: 15px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    width: 320px;
 }

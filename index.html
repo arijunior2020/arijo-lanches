@@ -146,13 +146,17 @@
     </div>
 
     <!-- Modal de confirmação de pedido -->
-    <div class="modal-background"></div>
     <div class="modal-confirmacao">
         <div class="modal-conteudo">
-            <h2 class="confirmar-texto">Confirme seu pedido</h2>
+            <h2 class="confirmar-texto"><span class="icon-check">&#10004;</span> Confirme seu pedido</h2>
+            <hr class="modal-divider">
             <div class="resumo-pedido"></div>
-            <button class="confirmar" onclick="enviarPedido()">Tudo certo, pode pedir!</button>
-            <button class="cancelar" onclick="cancelarPedido()">Cancelar</button>
+            <button class="confirmar" onclick="enviarPedido()">
+                <span class="icon">&#10004;</span> Tudo certo, pode pedir!
+            </button>
+            <button class="cancelar" onclick="cancelarPedido()">
+                <span class="icon">&#10006;</span> Cancelar
+            </button>
         </div>
     </div>
 

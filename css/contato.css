@@ -63,3 +63,45 @@ header h1 {
 .contact-section a:hover {
     text-decoration: underline;
 }
+
+/* Botão Voltar com ícone */
+.back-home-button {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    background-color: #C83A31; /* Cor vermelha do tema */
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s, transform 0.2s;
+    justify-content: center; /* Centraliza o conteúdo do botão */
+    margin: 0 auto;
+}
+
+.back-home-button:hover {
+    background-color: #a62927; /* Vermelho escuro para o hover */
+    transform: scale(1.05); /* Efeito de aumento no hover */
+}
+
+/* Ícone de seta */
+.back-home-button .icon {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+/* Seção do mapa */
+.map-section {
+    text-align: center;
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+.map-section h2 {
+    font-family: 'Righteous', sans-serif;
+    color: #C83A31;
+    font-size: 22px;
+    margin-bottom: 10px;
+}
