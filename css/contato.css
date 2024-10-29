@@ -13,7 +13,7 @@ body {
 
 /* Cabeçalho */
 header {
-    background-color: #C83A31; /* Mesma cor vermelha do tema */
+    background-color: #C83A31;
     padding: 20px;
     text-align: center;
     color: #fff;
@@ -35,7 +35,7 @@ header h1 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilos das Seções */
+/* Seções de contato e endereço */
 .contact-section, .address-section {
     margin-bottom: 20px;
     padding: 10px;
@@ -70,20 +70,20 @@ header h1 {
     align-items: center;
     text-decoration: none;
     color: white;
-    background-color: #C83A31; /* Cor vermelha do tema */
+    background-color: #C83A31;
     padding: 10px 20px;
     font-size: 18px;
     font-weight: 500;
     border-radius: 8px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
     transition: background-color 0.3s, transform 0.2s;
-    justify-content: center; /* Centraliza o conteúdo do botão */
+    justify-content: center;
     margin: 0 auto;
 }
 
 .back-home-button:hover {
-    background-color: #a62927; /* Vermelho escuro para o hover */
-    transform: scale(1.05); /* Efeito de aumento no hover */
+    background-color: #a62927;
+    transform: scale(1.05);
 }
 
 /* Ícone de seta */

@@ -5,31 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ari Jô Lanches</title>
-    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500&display=swap"
-        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500&display=swap">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
     <div class="container">
         <header>
-            <!-- Logo da marca -->
-            <img src="img/Logo Oficial Nova.png" alt="Logo Ari Jô Lanches" class="logo">
-
-            <!-- Título e descrição -->
+            <img src="img/Logo%20Oficial%20Nova.png" alt="Logo Ari Jô Lanches" class="logo">
             <div class="header-content">
                 <h1>Ari Jô Lanches</h1>
                 <p>Os melhores lanches da região</p>
             </div>
-
-            <!-- Ícone do menu hamburguer -->
             <div class="menu-icon" onclick="toggleMenu()">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
-
-            <!-- Menu suspenso (aparece ao clicar no menu hamburguer) -->
             <nav class="dropdown-menu">
                 <ul>
                     <li><a href="contato.html">Contato</a></li>
@@ -148,8 +141,11 @@
         </main>
     </div>
 
+    <!-- Camada de fundo para desfoque -->
+    <div class="modal-background"></div>
+
     <!-- Modal de confirmação de pedido -->
-    <div class="modal-confirmacao">
+    <div class="modal-confirmacao" id="modalConfirmacao">
         <div class="modal-conteudo">
             <h2 class="confirmar-texto"><span class="icon-check">&#10004;</span> Confirme seu pedido</h2>
             <hr class="modal-divider">
@@ -159,7 +155,7 @@
             <div class="form-endereco">
                 <label for="bairro">Digite seu bairro:</label>
                 <input type="text" id="bairro" placeholder="Ex: Araturi, Arianopolis, Jurema ou Metropole">
-                <p id="taxa-entrega"></p> <!-- Mostra a taxa de entrega com base no bairro -->
+                <p id="taxa-entrega"></p>
             </div>
 
             <div class="form-endereco">
@@ -167,18 +163,16 @@
                 <input type="text" id="endereco" placeholder="Ex: Rua ...">
             </div>
 
-            <button class="confirmar" onclick="calcularTaxaEntrega()">
-                <span class="icon">&#10004;</span> Tudo certo, pode pedir!
-            </button>
-            <button class="cancelar" onclick="cancelarPedido()">
-                <span class="icon">&#10006;</span> Cancelar
-            </button>
+            <!-- Botões de confirmação e cancelamento para o modal -->
+            <button class="confirmar" onclick="enviarPedido()">Tudo certo, pode pedir!</button>
+            <button class="cancelar" onclick="fecharModal()">Cancelar</button>
         </div>
     </div>
+    <!-- Scripts do Mercado Pago e JavaScript principal -->
     <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script>
         const mercadopago = new MercadoPago("APP_USR-fc9c75bb-342b-42dd-bc1e-fb7dc2a64d57", {
-            locale: 'pt-BR' // Define o idioma
+            locale: 'pt-BR'
         });
     </script>
     <script src="js/script.js"></script>

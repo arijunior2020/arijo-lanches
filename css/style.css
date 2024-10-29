@@ -1,13 +1,12 @@
-
 /* Classe para o efeito de item selecionado */
 .selecionado {
-    border: 2px solid #C83A31; /* Borda verde para indicar seleção */
+    border: 2px solid #C83A31; /* Borda vermelha para indicar seleção */
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); /* Sombra leve */
     transform: scale(1.05); /* Aumenta o item ligeiramente ao ser selecionado */
     transition: transform 0.2s ease, box-shadow 0.2s ease; /* Efeito de transição suave */
 }
 
-/* Resto do CSS permanece igual */
+/* Reseta e estilos gerais */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -36,8 +35,9 @@ header {
     justify-content: space-between;
     padding: 10px 20px;
     position: fixed;
-    width: 100%;
     top: 0;
+    left: 0;
+    width: 100vw; /* Garantir que o header ocupe a largura da viewport */
     z-index: 1000;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
     color: #fff;
@@ -112,6 +112,7 @@ header {
 .dropdown-menu.show {
     display: block;
 }
+
 .container {
     max-width: 800px;
     margin: 0 auto;
@@ -119,23 +120,6 @@ header {
     border-radius: 8px;
     padding: 20px;
     margin-top: 92px;
-}
-
-header {
-    background: #C83A31;
-    padding: 20px;
-    text-align: center;
-    color: #fff;
-    position: fixed;
-    width: 100vw;
-    left: 0;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-}
-
-header h1, header p {
-    margin: 0;
 }
 
 .secao {
@@ -153,7 +137,6 @@ header h1, header p {
 
 .item {
     width: 150px;
-    height: auto;
     background: #FFFFFF;
     border-radius: 8px;
     padding: 10px;
@@ -168,7 +151,6 @@ header h1, header p {
 
 .item img {
     width: 100%;
-    height: auto;
     max-width: 120px;
     border-radius: 8px;
     object-fit: cover;
@@ -190,18 +172,38 @@ header h1, header p {
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-.modal-background, .modal-confirmacao {
-    display: none;
+/* Camada de fundo para desfoque */
+.modal-background {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.4); /* Fundo semitransparente */
+    backdrop-filter: blur(8px); /* Aplica desfoque no fundo */
+    z-index: 999; /* Coloca a camada de fundo abaixo do modal */
+    display: none; /* Inicia escondido */
 }
 
+/* Estilo do modal centralizado */
+.modal-confirmacao {
+    background-color: #C83A31;
+    border-radius: 15px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    width: 320px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none; /* Esconde o modal até ser necessário */
+    flex-direction: column;
+    align-items: center;
+    z-index: 1000; /* Coloca o modal acima da camada de fundo */
+    overflow: hidden;
+}
+
+/* Centralização e estilo do conteúdo do modal */
 .modal-conteudo {
     text-align: center;
     color: white;
@@ -211,17 +213,17 @@ header h1, header p {
 .confirmar-texto {
     display: flex;
     align-items: center;
-    justify-content: center; /* Centraliza o conteúdo horizontalmente */
+    justify-content: center;
     font-size: 24px;
     color: #fff;
     gap: 5px;
-    text-align: center; /* Centraliza o texto dentro do container */
+    text-align: center;
     width: 100%;
 }
 
 .icon-check {
     font-size: 1.5em;
-    color: #32B72F !important; /* Ícone de cor verde */
+    color: #32B72F !important;
 }
 
 /* Linha divisora no modal */
@@ -257,20 +259,7 @@ header h1, header p {
     color: white;
 }
 
-.icon {
-    font-size: 1.2em;
-}
-
-/* Sombra e bordas arredondadas para o modal */
-.modal-confirmacao {
-    background-color: #C83A31;
-    border-radius: 15px;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
-    padding: 20px;
-    width: 320px;
-}
-
-/* Estilos para o campo de input do bairro */
+/* Campo de input do bairro */
 .form-endereco {
     margin: 15px 0;
     text-align: left;
@@ -292,10 +281,9 @@ header h1, header p {
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Estilos para o parágrafo da taxa de entrega */
 #taxa-entrega {
     font-size: 16px;
-    color: #7DDA58; /* Cor verde para destacar */
+    color: #7DDA58;
     font-weight: bold;
     margin-top: 10px;
 }
