@@ -59,11 +59,11 @@ function cancelarPedido() {
 
 // Função para calcular a taxa de entrega com base no bairro e atualizar o total no modal
 function calcularTaxaEntrega(event) {
-    event.preventDefault(); // Previne o comportamento padrão de envio
+    event.preventDefault();
 
     const bairro = document.getElementById("bairro").value.trim().toLowerCase();
     const taxaEntregaTexto = document.getElementById("taxa-entrega");
-    let total = pedido.reduce((acc, item) => acc + item.preco, 0); // Calcula o total inicial
+    let total = pedido.reduce((acc, item) => acc + item.preco, 0);
 
     if (bairro === "araturi" || bairro === "arianopolis") {
         taxaEntrega = 2.00;
@@ -77,12 +77,11 @@ function calcularTaxaEntrega(event) {
         taxaEntrega = 0;
         taxaEntregaTexto.innerText = "Bairro fora da área de entrega.";
         taxaEntregaTexto.style.color = "#FFDE59";
-        return; // Não prossegue com o cálculo se o bairro estiver fora da área de entrega
+        return;
     }
 
-    total += taxaEntrega; // Adiciona a taxa de entrega ao total
+    total += taxaEntrega;
 
-    // Atualiza o total no modal
     const resumoPedido = document.querySelector('.resumo-pedido');
     resumoPedido.innerHTML = '';
     pedido.forEach(item => {
@@ -94,14 +93,12 @@ function calcularTaxaEntrega(event) {
 
 // Função para enviar o pedido ao backend e redirecionar ao Mercado Pago
 async function enviarPedido() {
-  // Coleta informações do pedido e calcula o total
-  let total = pedido.reduce((acc, item) => acc + item.preco, 0); // Calcula o total inicial
+  let total = pedido.reduce((acc, item) => acc + item.preco, 0);
   const bairro = document.getElementById("bairro").value.trim().toLowerCase();
   const endereco = document.getElementById("endereco").value.trim();
 
   total += taxaEntrega;
 
-  // Dados a serem enviados ao backend
   const pedidoData = {
       pedido: pedido,
       endereco: endereco,
@@ -111,8 +108,7 @@ async function enviarPedido() {
   };
 
   try {
-      // Faz a requisição para o backend
-      const response = await fetch("http://localhost:3000/create_preference", {
+      const response = await fetch("https://311f-45-186-134-166.ngrok-free.app/create_preference", { // Atualizado para ngrok
           method: "POST",
           headers: {
               "Content-Type": "application/json"
@@ -122,7 +118,6 @@ async function enviarPedido() {
 
       if (response.ok) {
           const data = await response.json();
-          // Redireciona o usuário para o checkout do Mercado Pago
           window.location.href = data.init_point;
       } else {
           alert("Erro ao criar a preferência de pagamento. Tente novamente.");
@@ -138,11 +133,26 @@ document.querySelector('.confirmar').addEventListener('click', enviarPedido);
 document.querySelector('.cancelar').addEventListener('click', cancelarPedido);
 document.getElementById("bairro").addEventListener("input", calcularTaxaEntrega);
 
+async function verificarStatusPagamento() {
+  try {
+      const response = await fetch("https://311f-45-186-134-166.ngrok-free.app/status_pagamento"); // Atualizado para ngrok
+      const data = await response.json();
+
+      if (data.status === "approved") {
+          alert("Pagamento confirmado! Obrigado pelo pedido.");
+          window.location.href = "/success";
+      }
+  } catch (error) {
+      console.error("Erro ao verificar status do pagamento:", error);
+  }
+}
+
+setInterval(verificarStatusPagamento, 5000); // Verifica o status a cada 5 segundos
+
 // Função para alternar o menu hamburguer
 function toggleMenu() {
     const menu = document.querySelector('.dropdown-menu');
     menu.classList.toggle('show');
 }
 
-// Inicialmente, o botão "Finalizar Pedido" está escondido
 atualizarVisibilidadeBotao();
