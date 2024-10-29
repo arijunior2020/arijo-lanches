@@ -92,32 +92,45 @@ function calcularTaxaEntrega(event) {
     resumoPedido.innerHTML += `<p><strong>Total com entrega: R$ ${total.toFixed(2)}</strong></p>`;
 }
 
-// Função para enviar o pedido via WhatsApp
-function enviarPedido() {
-    let mensagemPedido = "*Olá, gostaria de fazer o pedido:*\n\n";
-    let total = pedido.reduce((acc, item) => acc + item.preco, 0); // Calcula o total inicial
+// Função para enviar o pedido ao backend e redirecionar ao Mercado Pago
+async function enviarPedido() {
+  // Coleta informações do pedido e calcula o total
+  let total = pedido.reduce((acc, item) => acc + item.preco, 0); // Calcula o total inicial
+  const bairro = document.getElementById("bairro").value.trim().toLowerCase();
+  const endereco = document.getElementById("endereco").value.trim();
 
-    const bairro = document.getElementById("bairro").value.trim().toLowerCase();
-    const endereco = document.getElementById("endereco").value.trim();
+  total += taxaEntrega;
 
-    pedido.forEach(item => {
-        mensagemPedido += `- *${item.nome}:* R$ ${item.preco.toFixed(2)}\n`;
-    });
+  // Dados a serem enviados ao backend
+  const pedidoData = {
+      pedido: pedido,
+      endereco: endereco,
+      bairro: bairro,
+      taxaEntrega: taxaEntrega,
+      total: total
+  };
 
-    total += taxaEntrega;
-    mensagemPedido += `\n*Taxa de entrega: R$ ${taxaEntrega.toFixed(2)}*`;
-    mensagemPedido += `\n*Total: R$ ${total.toFixed(2)}*\n\n`;
-    mensagemPedido += `- *Endereço:* ${endereco}\n`;
-    mensagemPedido += `- *Bairro:* ${bairro}\n`;
-    mensagemPedido += `*Para pagamento via PIX:*\n`;
-    mensagemPedido += `- *Tipo da Chave:* ${tipoChavePix}\n`;
-    mensagemPedido += `- *Chave PIX:* ${chavePix}\n`;
-    mensagemPedido += `- *Banco:* ${banco}\n`;
-    mensagemPedido += `- *Titular:* ${titular}\n\n`;
-    mensagemPedido += `*Obrigado por escolher Ari Jo Lanches!*`;
+  try {
+      // Faz a requisição para o backend
+      const response = await fetch("http://localhost:3000/create_preference", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify(pedidoData)
+      });
 
-    const urlPedido = `https://api.whatsapp.com/send?phone=5585987764006&text=${encodeURIComponent(mensagemPedido)}`;
-    window.open(urlPedido, '_blank');
+      if (response.ok) {
+          const data = await response.json();
+          // Redireciona o usuário para o checkout do Mercado Pago
+          window.location.href = data.init_point;
+      } else {
+          alert("Erro ao criar a preferência de pagamento. Tente novamente.");
+      }
+  } catch (error) {
+      console.error("Erro:", error);
+      alert("Erro ao processar o pedido.");
+  }
 }
 
 // Adiciona os eventos para os botões de confirmação e cancelamento
