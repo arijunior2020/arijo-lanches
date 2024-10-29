@@ -89,41 +89,43 @@ function calcularTaxaEntrega() {
 }
 
 // Função para enviar o pedido ao backend e redirecionar ao Mercado Pago
+// Função para enviar o pedido ao backend e redirecionar ao Mercado Pago
 async function enviarPedido() {
-    let total = pedido.reduce((acc, item) => acc + item.preco, 0);
-    const bairro = document.getElementById("bairro").value.trim().toLowerCase();
-    const endereco = document.getElementById("endereco").value.trim();
+  let total = pedido.reduce((acc, item) => acc + item.preco, 0);
+  const bairro = document.getElementById("bairro").value.trim().toLowerCase();
+  const endereco = document.getElementById("endereco").value.trim();
 
-    total += taxaEntrega;
+  total += taxaEntrega;
 
-    const pedidoData = {
-        pedido: pedido,
-        endereco: endereco,
-        bairro: bairro,
-        taxaEntrega: taxaEntrega,
-        total: total
-    };
+  const pedidoData = {
+      pedido: pedido,
+      endereco: endereco,
+      bairro: bairro,
+      taxaEntrega: taxaEntrega,
+      total: total
+  };
 
-    try {
-        const response = await fetch("https://311f-45-186-134-166.ngrok-free.app/create_preference", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(pedidoData)
-        });
+  try {
+      const response = await fetch("https://311f-45-186-134-166.ngrok-free.app/create_preference", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify(pedidoData)
+      });
 
-        if (response.ok) {
-            const data = await response.json();
-            sessionStorage.setItem("preferenceId", data.id); // Armazena o ID da preferência
-            window.location.href = data.init_point;
-        } else {
-            alert("Erro ao criar a preferência de pagamento. Tente novamente.");
-        }
-    } catch (error) {
-        console.error("Erro:", error);
-        alert("Erro ao processar o pedido.");
-    }
+      if (response.ok) {
+          const data = await response.json();
+          sessionStorage.setItem("preferenceId", data.id); // Armazena o ID da preferência
+          window.location.href = data.init_point;
+      } else {
+          console.error("Erro na resposta da API:", response.status, response.statusText);
+          alert("Erro ao criar a preferência de pagamento. Tente novamente.");
+      }
+  } catch (error) {
+      console.error("Erro ao fazer a requisição:", error);
+      alert("Erro ao processar o pedido.");
+  }
 }
 
 // Função para verificar o status do pagamento
