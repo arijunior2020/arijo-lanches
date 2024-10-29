@@ -140,17 +140,12 @@ async function verificarStatusPagamento() {
 
   try {
     const response = await fetch(`https://311f-45-186-134-166.ngrok-free.app/status_pagamento/${preferenceId}`);
-    console.log("Resposta do Backend:", response); // Log para depuração
     if (!response.ok) {
       console.error("Erro na resposta do backend:", response.statusText);
       return;
     }
 
-    const textData = await response.text();
-    console.log("Conteúdo da Resposta:", textData); // Log para depuração
-    const data = JSON.parse(textData);
-
-    //const data = await response.json();
+    const data = await response.json();
     console.log("Status do pagamento recebido:", data.status); // Log para depuração
 
     if (data.status === "approved") {
