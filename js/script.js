@@ -139,14 +139,22 @@ async function verificarStatusPagamento() {
 
       if (data.status === "approved") {
           alert("Pagamento confirmado! Obrigado pelo pedido.");
-          window.location.href = "/success";
+          sessionStorage.removeItem("preferenceId"); // Limpa o ID da preferência após confirmação
+          window.location.href = "/success"; // Redireciona para a página de sucesso
+      } else if (data.status === "pending") {
+          console.log("Pagamento ainda pendente, verificando novamente...");
+      } else {
+          console.warn("Status desconhecido:", data.status);
       }
   } catch (error) {
       console.error("Erro ao verificar status do pagamento:", error);
   }
 }
 
-setInterval(verificarStatusPagamento, 5000); // Verifica o status a cada 5 segundos
+// Verifica o status a cada 5 segundos apenas enquanto houver um preferenceId
+if (sessionStorage.getItem("preferenceId")) {
+    setInterval(verificarStatusPagamento, 5000);
+}
 
 
 // Adiciona os eventos para os botões de confirmação e cancelamento
