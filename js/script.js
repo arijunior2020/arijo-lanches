@@ -1,43 +1,40 @@
+// Variáveis globais
 let pedido = [];
-const chavePix = "66814243334"; // Insira o CPF ou chave PIX sem pontos e traços
-const tipoChavePix = "CPF"; // Tipo da chave PIX (ex: CPF, CNPJ, E-mail, Telefone, Aleatória)
-const banco = "Santander"; // Nome do banco
-const titular = "JOSE ARIMATEIA RODRIGUES JUNIOR"; // Nome do titular da conta
+const chavePix = "66814243334";
+const tipoChavePix = "CPF";
+const banco = "Santander";
+const titular = "JOSE ARIMATEIA RODRIGUES JUNIOR";
+let taxaEntrega = 0;
 
-const botaoFinalizar = document.querySelector('.finalizar-pedido'); // Seleciona o botão de finalizar pedido
+const botaoFinalizar = document.querySelector('.finalizar-pedido');
 
 // Função para adicionar ou remover itens do pedido
 function adicionarItem(nome, preco, elemento) {
     if (elemento.classList.contains('selecionado')) {
         elemento.classList.remove('selecionado');
-        pedido = pedido.filter(item => item.nome !== nome); // Remove o item do pedido
+        pedido = pedido.filter(item => item.nome !== nome);
     } else {
         elemento.classList.add('selecionado');
-        pedido.push({ nome, preco }); // Adiciona o item ao pedido
+        pedido.push({ nome, preco });
     }
     atualizarResumoPedido();
-    atualizarVisibilidadeBotao(); // Atualiza a visibilidade do botão sempre que o pedido muda
+    atualizarVisibilidadeBotao();
 }
 
-// Função para atualizar o texto do botão com o número de itens
+// Função para atualizar o resumo do pedido no botão
 function atualizarResumoPedido() {
     botaoFinalizar.innerText = `Finalizar Pedido - ${pedido.length} itens`;
 }
 
 // Função para controlar a visibilidade do botão "Finalizar Pedido"
 function atualizarVisibilidadeBotao() {
-    if (pedido.length > 0) {
-        botaoFinalizar.style.display = 'block'; // Mostra o botão se houver itens no pedido
-    } else {
-        botaoFinalizar.style.display = 'none'; // Esconde o botão se não houver itens
-    }
+    botaoFinalizar.style.display = pedido.length > 0 ? 'block' : 'none';
 }
 
-// Função para mostrar o modal de confirmação de pedido
+// Função para mostrar o modal de confirmação do pedido
 function confirmarPedido() {
     const modal = document.querySelector('.modal-confirmacao');
     const background = document.querySelector('.modal-background');
-
     const resumoPedido = document.querySelector('.resumo-pedido');
     resumoPedido.innerHTML = '';
     let total = 0;
@@ -48,7 +45,7 @@ function confirmarPedido() {
     });
     resumoPedido.innerHTML += `<p><strong>Total: R$ ${total.toFixed(2)}</strong></p>`;
 
-    botaoFinalizar.style.display = 'none'; // Oculta o botão de finalizar pedido quando o modal está aberto
+    botaoFinalizar.style.display = 'none';
     modal.style.display = 'flex';
     background.style.display = 'block';
 }
@@ -57,23 +54,55 @@ function confirmarPedido() {
 function cancelarPedido() {
     document.querySelector('.modal-confirmacao').style.display = 'none';
     document.querySelector('.modal-background').style.display = 'none';
-    atualizarVisibilidadeBotao(); // Atualiza a visibilidade do botão quando o modal fecha
+    atualizarVisibilidadeBotao();
+}
+
+// Função para calcular a taxa de entrega com base no bairro e atualizar o total no modal
+function calcularTaxaEntrega(event) {
+    event.preventDefault(); // Previne o comportamento padrão de envio
+
+    const bairro = document.getElementById("bairro").value.trim().toLowerCase();
+    const taxaEntregaTexto = document.getElementById("taxa-entrega");
+    let total = pedido.reduce((acc, item) => acc + item.preco, 0); // Calcula o total inicial
+
+    if (bairro === "araturi" || bairro === "arianopolis") {
+        taxaEntrega = 2.00;
+        taxaEntregaTexto.innerText = "Taxa de entrega: R$ 2,00";
+        taxaEntregaTexto.style.color = "#FFD700";
+    } else if (bairro === "jurema" || bairro === "metropole") {
+        taxaEntrega = 3.00;
+        taxaEntregaTexto.innerText = "Taxa de entrega: R$ 3,00";
+        taxaEntregaTexto.style.color = "#FFD700";
+    } else {
+        taxaEntrega = 0;
+        taxaEntregaTexto.innerText = "Bairro fora da área de entrega.";
+        taxaEntregaTexto.style.color = "#FF4500";
+        return; // Não prossegue com o cálculo se o bairro estiver fora da área de entrega
+    }
+
+    total += taxaEntrega; // Adiciona a taxa de entrega ao total
+
+    // Atualiza o total no modal
+    const resumoPedido = document.querySelector('.resumo-pedido');
+    resumoPedido.innerHTML = '';
+    pedido.forEach(item => {
+        resumoPedido.innerHTML += `<p>${item.nome} - R$ ${item.preco.toFixed(2)}</p>`;
+    });
+    resumoPedido.innerHTML += `<p>Taxa de entrega: R$ ${taxaEntrega.toFixed(2)}</p>`;
+    resumoPedido.innerHTML += `<p><strong>Total com entrega: R$ ${total.toFixed(2)}</strong></p>`;
 }
 
 // Função para enviar o pedido via WhatsApp
-function enviarPedido(event) {
-    event.preventDefault();
-
+function enviarPedido() {
     let mensagemPedido = "*Olá, gostaria de fazer o pedido:*\n\n";
-    let total = 0;
+    let total = pedido.reduce((acc, item) => acc + item.preco, 0); // Calcula o total inicial
 
-    // Formata cada item do pedido em uma nova linha
     pedido.forEach(item => {
-        total += item.preco;
         mensagemPedido += `- *${item.nome}:* R$ ${item.preco.toFixed(2)}\n`;
     });
 
-    // Adiciona o total e informações de pagamento na mensagem
+    total += taxaEntrega;
+    mensagemPedido += `\n*Taxa de entrega: R$ ${taxaEntrega.toFixed(2)}*`;
     mensagemPedido += `\n*Total: R$ ${total.toFixed(2)}*\n\n`;
     mensagemPedido += `*Para pagamento via PIX:*\n`;
     mensagemPedido += `- *Tipo da Chave:* ${tipoChavePix}\n`;
@@ -89,6 +118,7 @@ function enviarPedido(event) {
 // Adiciona os eventos para os botões de confirmação e cancelamento
 document.querySelector('.confirmar').addEventListener('click', enviarPedido);
 document.querySelector('.cancelar').addEventListener('click', cancelarPedido);
+document.getElementById("bairro").addEventListener("input", calcularTaxaEntrega);
 
 // Função para alternar o menu hamburguer
 function toggleMenu() {

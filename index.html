@@ -1,31 +1,34 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ari Jô Lanches</title>
-    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <div class="container">
         <header>
             <!-- Logo da marca -->
             <img src="img/Logo Oficial Nova.png" alt="Logo Ari Jô Lanches" class="logo">
-    
+
             <!-- Título e descrição -->
             <div class="header-content">
                 <h1>Ari Jô Lanches</h1>
                 <p>Os melhores lanches da região</p>
             </div>
-    
+
             <!-- Ícone do menu hamburguer -->
             <div class="menu-icon" onclick="toggleMenu()">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
-    
+
             <!-- Menu suspenso (aparece ao clicar no menu hamburguer) -->
             <nav class="dropdown-menu">
                 <ul>
@@ -137,7 +140,7 @@
                     </div>
                 </div>
             </section>
-            
+
             <!-- Botão Finalizar Pedido -->
             <footer>
                 <button class="finalizar-pedido" onclick="confirmarPedido()">Finalizar Pedido</button>
@@ -151,7 +154,15 @@
             <h2 class="confirmar-texto"><span class="icon-check">&#10004;</span> Confirme seu pedido</h2>
             <hr class="modal-divider">
             <div class="resumo-pedido"></div>
-            <button class="confirmar" onclick="enviarPedido()">
+
+            <!-- Formulário de endereço para calcular a taxa de entrega -->
+            <div class="form-endereco">
+                <label for="bairro">Digite seu bairro:</label>
+                <input type="text" id="bairro" placeholder="Ex: Araturi, Arianopolis, Jurema ou Metropole">
+                <p id="taxa-entrega"></p> <!-- Mostra a taxa de entrega com base no bairro -->
+            </div>
+
+            <button class="confirmar" onclick="calcularTaxaEntrega()">
                 <span class="icon">&#10004;</span> Tudo certo, pode pedir!
             </button>
             <button class="cancelar" onclick="cancelarPedido()">
@@ -162,4 +173,5 @@
 
     <script src="js/script.js"></script>
 </body>
+
 </html>
