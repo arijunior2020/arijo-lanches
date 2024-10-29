@@ -128,6 +128,8 @@ async function enviarPedido() {
   }
 }
 
+let intervaloVerificacao; // Variável global para o intervalo
+
 // Função para verificar o status do pagamento
 async function verificarStatusPagamento() {
   const preferenceId = sessionStorage.getItem("preferenceId");
@@ -149,14 +151,14 @@ async function verificarStatusPagamento() {
       if (data.status === "approved") {
           alert("Pagamento confirmado! Obrigado pelo pedido.");
           sessionStorage.removeItem("preferenceId");
-          clearInterval(intervaloVerificacao);
+          clearInterval(intervaloVerificacao); // Limpa o intervalo global
           window.location.href = "/success";
       } else if (data.status === "pending") {
           console.log("Pagamento ainda pendente, verificando novamente...");
       } else if (data.status === "rejected") {
           alert("Pagamento foi rejeitado. Tente novamente.");
           sessionStorage.removeItem("preferenceId");
-          clearInterval(intervaloVerificacao);
+          clearInterval(intervaloVerificacao); // Limpa o intervalo global
           window.location.href = "/failure";
       } else {
           console.warn("Status desconhecido:", data.status);
@@ -169,7 +171,7 @@ async function verificarStatusPagamento() {
 // Inicia a verificação de status a cada 5 segundos apenas se houver um preferenceId armazenado
 if (sessionStorage.getItem("preferenceId")) {
   let verificacoes = 0;
-  const intervaloVerificacao = setInterval(() => {
+  intervaloVerificacao = setInterval(() => {
       verificarStatusPagamento();
       verificacoes++;
 
@@ -180,6 +182,7 @@ if (sessionStorage.getItem("preferenceId")) {
       }
   }, 5000);
 }
+
 
 
 // Adiciona os eventos para os botões de confirmação e cancelamento
