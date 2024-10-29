@@ -68,15 +68,15 @@ function calcularTaxaEntrega(event) {
     if (bairro === "araturi" || bairro === "arianopolis") {
         taxaEntrega = 2.00;
         taxaEntregaTexto.innerText = "Taxa de entrega: R$ 2,00";
-        taxaEntregaTexto.style.color = "#FFD700";
+        taxaEntregaTexto.style.color = "#7DDA58";
     } else if (bairro === "jurema" || bairro === "metropole") {
         taxaEntrega = 3.00;
         taxaEntregaTexto.innerText = "Taxa de entrega: R$ 3,00";
-        taxaEntregaTexto.style.color = "#FFD700";
+        taxaEntregaTexto.style.color = "#7DDA58";
     } else {
         taxaEntrega = 0;
         taxaEntregaTexto.innerText = "Bairro fora da área de entrega.";
-        taxaEntregaTexto.style.color = "#FF4500";
+        taxaEntregaTexto.style.color = "#FFDE59";
         return; // Não prossegue com o cálculo se o bairro estiver fora da área de entrega
     }
 
@@ -97,6 +97,9 @@ function enviarPedido() {
     let mensagemPedido = "*Olá, gostaria de fazer o pedido:*\n\n";
     let total = pedido.reduce((acc, item) => acc + item.preco, 0); // Calcula o total inicial
 
+    const bairro = document.getElementById("bairro").value.trim().toLowerCase();
+    const endereco = document.getElementById("endereco").value.trim();
+
     pedido.forEach(item => {
         mensagemPedido += `- *${item.nome}:* R$ ${item.preco.toFixed(2)}\n`;
     });
@@ -104,6 +107,8 @@ function enviarPedido() {
     total += taxaEntrega;
     mensagemPedido += `\n*Taxa de entrega: R$ ${taxaEntrega.toFixed(2)}*`;
     mensagemPedido += `\n*Total: R$ ${total.toFixed(2)}*\n\n`;
+    mensagemPedido += `- *Endereço:* ${endereco}\n`;
+    mensagemPedido += `- *Bairro:* ${bairro}\n`;
     mensagemPedido += `*Para pagamento via PIX:*\n`;
     mensagemPedido += `- *Tipo da Chave:* ${tipoChavePix}\n`;
     mensagemPedido += `- *Chave PIX:* ${chavePix}\n`;

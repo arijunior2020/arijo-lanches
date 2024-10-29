@@ -217,7 +217,7 @@ header h1, header p {
 
 .icon-check {
     font-size: 1.5em;
-    color: #32B72F; /* Ícone de cor verde */
+    color: #32B72F !important; /* Ícone de cor verde */
 }
 
 /* Linha divisora no modal */
@@ -291,7 +291,7 @@ header h1, header p {
 /* Estilos para o parágrafo da taxa de entrega */
 #taxa-entrega {
     font-size: 16px;
-    color: #FFD700; /* Cor dourada para destacar */
+    color: #7DDA58; /* Cor verde para destacar */
     font-weight: bold;
     margin-top: 10px;
 }
