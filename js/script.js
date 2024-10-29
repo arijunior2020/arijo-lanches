@@ -152,14 +152,14 @@ async function verificarStatusPagamento() {
           alert("Pagamento confirmado! Obrigado pelo pedido.");
           sessionStorage.removeItem("preferenceId");
           clearInterval(intervaloVerificacao); // Limpa o intervalo global
-          window.location.href = "/success.html";
+          window.location.href = "https://arijo-lanches.vercel.app/success.html";
       } else if (data.status === "pending") {
           console.log("Pagamento ainda pendente, verificando novamente...");
       } else if (data.status === "rejected") {
           alert("Pagamento foi rejeitado. Tente novamente.");
           sessionStorage.removeItem("preferenceId");
           clearInterval(intervaloVerificacao); // Limpa o intervalo global
-          window.location.href = "/failure.html";
+          window.location.href = "https://arijo-lanches.vercel.app/failure.html";
       } else {
           console.warn("Status desconhecido:", data.status);
       }
