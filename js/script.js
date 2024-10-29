@@ -32,16 +32,11 @@ function atualizarVisibilidadeBotao() {
 }
 
 // Função para mostrar o modal de confirmação do pedido
+// Função para mostrar o modal de confirmação do pedido
 function confirmarPedido() {
   const modal = document.querySelector('.modal-confirmacao');
   const background = document.querySelector('.modal-background');
   const resumoPedido = document.querySelector('.resumo-pedido');
-
-  if (!modal || !background || !resumoPedido) {
-      console.warn("Elementos do modal de confirmação não encontrados.");
-      return;
-  }
-
   resumoPedido.innerHTML = '';
   let total = 0;
 
