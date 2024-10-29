@@ -130,44 +130,57 @@ async function enviarPedido() {
 
 // Função para verificar o status do pagamento
 async function verificarStatusPagamento() {
-    const preferenceId = sessionStorage.getItem("preferenceId");
-    if (!preferenceId) return;
+  const preferenceId = sessionStorage.getItem("preferenceId");
+  if (!preferenceId) {
+      console.warn("Preference ID não encontrado no sessionStorage.");
+      return;
+  }
 
-    try {
-        const response = await fetch(`https://311f-45-186-134-166.ngrok-free.app/status_pagamento/${preferenceId}`);
-        const data = await response.json();
+  try {
+      const response = await fetch(`https://311f-45-186-134-166.ngrok-free.app/status_pagamento/${preferenceId}`);
+      if (!response.ok) {
+          console.error("Erro na resposta do backend:", response.statusText);
+          return;
+      }
 
-        if (data.status === "approved") {
-            alert("Pagamento confirmado! Obrigado pelo pedido.");
-            sessionStorage.removeItem("preferenceId");
-            window.location.href = "/success";
-        } else if (data.status === "pending") {
-            console.log("Pagamento ainda pendente, verificando novamente...");
-        } else if (data.status === "rejected") {
-            alert("Pagamento foi rejeitado. Tente novamente.");
-            sessionStorage.removeItem("preferenceId");
-            window.location.href = "/failure";
-        } else {
-            console.warn("Status desconhecido:", data.status);
-        }
-    } catch (error) {
-        console.error("Erro ao verificar status do pagamento:", error);
-    }
+      const data = await response.json();
+      console.log("Status do pagamento recebido:", data.status); // Log para depuração
+
+      if (data.status === "approved") {
+          alert("Pagamento confirmado! Obrigado pelo pedido.");
+          sessionStorage.removeItem("preferenceId");
+          clearInterval(intervaloVerificacao);
+          window.location.href = "/success";
+      } else if (data.status === "pending") {
+          console.log("Pagamento ainda pendente, verificando novamente...");
+      } else if (data.status === "rejected") {
+          alert("Pagamento foi rejeitado. Tente novamente.");
+          sessionStorage.removeItem("preferenceId");
+          clearInterval(intervaloVerificacao);
+          window.location.href = "/failure";
+      } else {
+          console.warn("Status desconhecido:", data.status);
+      }
+  } catch (error) {
+      console.error("Erro ao verificar status do pagamento:", error);
+  }
 }
 
 // Inicia a verificação de status a cada 5 segundos apenas se houver um preferenceId armazenado
 if (sessionStorage.getItem("preferenceId")) {
-    let verificacoes = 0;
-    const intervaloVerificacao = setInterval(() => {
-        verificarStatusPagamento();
-        verificacoes++;
+  let verificacoes = 0;
+  const intervaloVerificacao = setInterval(() => {
+      verificarStatusPagamento();
+      verificacoes++;
 
-        // Cancela a verificação após 30 tentativas (aproximadamente 2.5 minutos)
-        if (verificacoes >= 30 || !sessionStorage.getItem("preferenceId")) {
-            clearInterval(intervaloVerificacao);
-        }
-    }, 5000);
+      // Cancela a verificação após 30 tentativas (aproximadamente 2.5 minutos)
+      if (verificacoes >= 30 || !sessionStorage.getItem("preferenceId")) {
+          console.log("Cancelando verificação de status do pagamento após 30 tentativas.");
+          clearInterval(intervaloVerificacao);
+      }
+  }, 5000);
 }
+
 
 // Adiciona os eventos para os botões de confirmação e cancelamento
 document.querySelector('.confirmar').addEventListener('click', enviarPedido);
