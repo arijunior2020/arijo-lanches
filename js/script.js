@@ -33,21 +33,27 @@ function atualizarVisibilidadeBotao() {
 
 // Função para mostrar o modal de confirmação do pedido
 function confirmarPedido() {
-    const modal = document.querySelector('.modal-confirmacao');
-    const background = document.querySelector('.modal-background');
-    const resumoPedido = document.querySelector('.resumo-pedido');
-    resumoPedido.innerHTML = '';
-    let total = 0;
+  const modal = document.querySelector('.modal-confirmacao');
+  const background = document.querySelector('.modal-background');
+  const resumoPedido = document.querySelector('.resumo-pedido');
 
-    pedido.forEach(item => {
-        total += item.preco;
-        resumoPedido.innerHTML += `<p>${item.nome} - R$ ${item.preco.toFixed(2)}</p>`;
-    });
-    resumoPedido.innerHTML += `<p><strong>Total: R$ ${total.toFixed(2)}</strong></p>`;
+  if (!modal || !background || !resumoPedido) {
+      console.warn("Elementos do modal de confirmação não encontrados.");
+      return;
+  }
 
-    botaoFinalizar.style.display = 'none';
-    modal.style.display = 'flex';
-    background.style.display = 'block';
+  resumoPedido.innerHTML = '';
+  let total = 0;
+
+  pedido.forEach(item => {
+      total += item.preco;
+      resumoPedido.innerHTML += `<p>${item.nome} - R$ ${item.preco.toFixed(2)}</p>`;
+  });
+  resumoPedido.innerHTML += `<p><strong>Total: R$ ${total.toFixed(2)}</strong></p>`;
+
+  botaoFinalizar.style.display = 'none';
+  modal.style.display = 'flex';
+  background.style.display = 'block';
 }
 
 // Função para fechar o modal e exibir o botão novamente
