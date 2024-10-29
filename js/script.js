@@ -108,7 +108,7 @@ async function enviarPedido() {
   };
 
   try {
-      const response = await fetch("https://311f-45-186-134-166.ngrok-free.app/create_preference", { // Atualizado para ngrok
+      const response = await fetch("https://311f-45-186-134-166.ngrok-free.app/create_preference", {
           method: "POST",
           headers: {
               "Content-Type": "application/json"
@@ -118,6 +118,7 @@ async function enviarPedido() {
 
       if (response.ok) {
           const data = await response.json();
+          sessionStorage.setItem("preferenceId", data.id); // Armazena o ID da preferência
           window.location.href = data.init_point;
       } else {
           alert("Erro ao criar a preferência de pagamento. Tente novamente.");
@@ -128,14 +129,12 @@ async function enviarPedido() {
   }
 }
 
-// Adiciona os eventos para os botões de confirmação e cancelamento
-document.querySelector('.confirmar').addEventListener('click', enviarPedido);
-document.querySelector('.cancelar').addEventListener('click', cancelarPedido);
-document.getElementById("bairro").addEventListener("input", calcularTaxaEntrega);
-
 async function verificarStatusPagamento() {
+  const preferenceId = sessionStorage.getItem("preferenceId"); // Recupera o ID da preferência
+  if (!preferenceId) return;
+
   try {
-      const response = await fetch("https://311f-45-186-134-166.ngrok-free.app/status_pagamento"); // Atualizado para ngrok
+      const response = await fetch(`https://311f-45-186-134-166.ngrok-free.app/status_pagamento/${preferenceId}`);
       const data = await response.json();
 
       if (data.status === "approved") {
@@ -148,6 +147,13 @@ async function verificarStatusPagamento() {
 }
 
 setInterval(verificarStatusPagamento, 5000); // Verifica o status a cada 5 segundos
+
+
+// Adiciona os eventos para os botões de confirmação e cancelamento
+document.querySelector('.confirmar').addEventListener('click', enviarPedido);
+document.querySelector('.cancelar').addEventListener('click', cancelarPedido);
+document.getElementById("bairro").addEventListener("input", calcularTaxaEntrega);
+
 
 // Função para alternar o menu hamburguer
 function toggleMenu() {
