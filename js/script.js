@@ -129,6 +129,7 @@ async function enviarPedido() {
   }
 }
 
+// Função para verificar o status do pagamento
 async function verificarStatusPagamento() {
   const preferenceId = sessionStorage.getItem("preferenceId"); // Recupera o ID da preferência
   if (!preferenceId) return;
@@ -143,6 +144,10 @@ async function verificarStatusPagamento() {
           window.location.href = "/success"; // Redireciona para a página de sucesso
       } else if (data.status === "pending") {
           console.log("Pagamento ainda pendente, verificando novamente...");
+      } else if (data.status === "rejected") {
+          alert("Pagamento foi rejeitado. Tente novamente.");
+          sessionStorage.removeItem("preferenceId"); // Limpa o ID da preferência após falha
+          window.location.href = "/failure"; // Redireciona para a página de falha
       } else {
           console.warn("Status desconhecido:", data.status);
       }
@@ -151,9 +156,18 @@ async function verificarStatusPagamento() {
   }
 }
 
-// Verifica o status a cada 5 segundos apenas enquanto houver um preferenceId
+// Inicia a verificação de status a cada 5 segundos apenas se houver um preferenceId armazenado
 if (sessionStorage.getItem("preferenceId")) {
-    setInterval(verificarStatusPagamento, 5000);
+  let verificacoes = 0;
+  const intervaloVerificacao = setInterval(() => {
+      verificarStatusPagamento();
+      verificacoes++;
+
+      // Cancela a verificação após 30 tentativas (aproximadamente 2.5 minutos)
+      if (verificacoes >= 30 || !sessionStorage.getItem("preferenceId")) {
+          clearInterval(intervaloVerificacao);
+      }
+  }, 5000);
 }
 
 
