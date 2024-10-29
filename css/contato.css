@@ -1,0 +1,65 @@
+/* Estilos gerais */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+/* Cabeçalho */
+header {
+    background-color: #C83A31; /* Mesma cor vermelha do tema */
+    padding: 20px;
+    text-align: center;
+    color: #fff;
+}
+
+header h1 {
+    font-family: 'Righteous', sans-serif;
+    font-size: 28px;
+    margin: 0;
+}
+
+/* Conteúdo principal */
+.content {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos das Seções */
+.contact-section, .address-section {
+    margin-bottom: 20px;
+    padding: 10px;
+    text-align: center;
+}
+
+.contact-section h2, .address-section h2 {
+    font-family: 'Righteous', sans-serif;
+    color: #C83A31;
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.contact-section p, .address-section p {
+    font-size: 18px;
+    color: #333;
+}
+
+.contact-section a {
+    color: #C83A31;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.contact-section a:hover {
+    text-decoration: underline;
+}

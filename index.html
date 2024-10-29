@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ari Jô Lanches</title>
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <!-- Logo da marca -->
+            <img src="img/Logo Oficial Nova.png" alt="Logo Ari Jô Lanches" class="logo">
+    
+            <!-- Título e descrição -->
+            <div class="header-content">
+                <h1>Ari Jô Lanches</h1>
+                <p>Os melhores lanches da região</p>
+            </div>
+    
+            <!-- Ícone do menu hamburguer -->
+            <div class="menu-icon" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+    
+            <!-- Menu suspenso (aparece ao clicar no menu hamburguer) -->
+            <nav class="dropdown-menu">
+                <ul>
+                    <li><a href="contato.html">Contato</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Seção de Hambúrguer -->
+            <section class="secao">
+                <h2>Hambúrguer</h2>
+                <div class="menu-items">
+                    <div class="item" onclick="adicionarItem('Hambúrguer', 8.00, this)">
+                        <img src="img/hamburguer.webp" alt="Hambúrguer">
+                        <h3>Hambúrguer</h3>
+                        <p>Delicioso hambúrguer</p>
+                        <span class="preco">R$ 8,00</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Cachorro Quente -->
+            <section class="secao">
+                <h2>Cachorro Quente</h2>
+                <div class="menu-items">
+                    <div class="item" onclick="adicionarItem('Cachorro Quente', 8.00, this)">
+                        <img src="img/hot-dog.webp" alt="Cachorro Quente">
+                        <h3>Cachorro Quente</h3>
+                        <p>Simples e saboroso</p>
+                        <span class="preco">R$ 8,00</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Pratinho -->
+            <section class="secao">
+                <h2>Pratinho</h2>
+                <div class="menu-items">
+                    <div class="item" onclick="adicionarItem('Pratinho Pequeno', 8.00, this)">
+                        <img src="img/pratinho.jpg" alt="Pratinho Pequeno">
+                        <h3>Pratinho Pequeno</h3>
+                        <span class="preco">R$ 8,00</span>
+                    </div>
+                    <div class="item" onclick="adicionarItem('Pratinho Grande', 12.00, this)">
+                        <img src="img/pratinho.jpg" alt="Pratinho Grande">
+                        <h3>Pratinho Grande</h3>
+                        <span class="preco">R$ 12,00</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Batata Frita -->
+            <section class="secao">
+                <h2>Batata Frita</h2>
+                <div class="menu-items">
+                    <div class="item" onclick="adicionarItem('Batata Frita Pequena', 6.00, this)">
+                        <img src="img/batata-frita.jpg" alt="Batata Frita Pequena">
+                        <h3>Batata Frita Pequena</h3>
+                        <span class="preco">R$ 6,00</span>
+                    </div>
+                    <div class="item" onclick="adicionarItem('Batata Frita Grande', 8.00, this)">
+                        <img src="img/batata-frita.jpg" alt="Batata Frita Grande">
+                        <h3>Batata Frita Grande</h3>
+                        <span class="preco">R$ 8,00</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Massas -->
+            <section class="secao">
+                <h2>Massas</h2>
+                <div class="menu-items">
+                    <div class="item" onclick="adicionarItem('Massa', 16.00, this)">
+                        <img src="img/massas.webp" alt="Massas">
+                        <h3>Massa</h3>
+                        <p>Molho à escolha</p>
+                        <span class="preco">R$ 16,00</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Bebidas -->
+            <section class="secao">
+                <h2>Bebidas</h2>
+                <div class="menu-items">
+                    <div class="item" onclick="adicionarItem('Refrigerante Pequeno', 3.00, this)">
+                        <img src="img/refri-peq.jpg" alt="Refrigerante Pequeno">
+                        <h3>Refrigerante Pequeno</h3>
+                        <span class="preco">R$ 3,00</span>
+                    </div>
+                    <div class="item" onclick="adicionarItem('Refrigerante Lata', 5.00, this)">
+                        <img src="img/refri-lata.jpg" alt="Refrigerante Lata">
+                        <h3>Refrigerante Lata</h3>
+                        <span class="preco">R$ 5,00</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Diversos -->
+            <section class="secao">
+                <h2>Diversos</h2>
+                <div class="menu-items">
+                    <div class="item" onclick="adicionarItem('Mucunzá', 5.00, this)">
+                        <img src="img/mucunzá-doce.jpg" alt="Mucunzá Doce">
+                        <h3>Mucunzá</h3>
+                        <p>Tradicional e delicioso</p>
+                        <span class="preco">R$ 5,00</span>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Botão Finalizar Pedido -->
+            <footer>
+                <button class="finalizar-pedido" onclick="confirmarPedido()">Finalizar Pedido</button>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Modal de confirmação de pedido -->
+    <div class="modal-background"></div>
+    <div class="modal-confirmacao">
+        <div class="modal-conteudo">
+            <h2 class="confirmar-texto">Confirme seu pedido</h2>
+            <div class="resumo-pedido"></div>
+            <button class="confirmar" onclick="enviarPedido()">Tudo certo, pode pedir!</button>
+            <button class="cancelar" onclick="cancelarPedido()">Cancelar</button>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

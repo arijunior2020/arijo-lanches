@@ -1,0 +1,214 @@
+/* Classe para o efeito de item selecionado */
+.selecionado {
+    border: 2px solid #C83A31; /* Borda verde para indicar seleção */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); /* Sombra leve */
+    transform: scale(1.05); /* Aumenta o item ligeiramente ao ser selecionado */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Efeito de transição suave */
+}
+
+/* Resto do CSS permanece igual */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f8f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+h2 {
+    margin: 20px 0;
+}
+
+/* Estilos do Cabeçalho */
+header {
+    background-color: #C83A31;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    color: #fff;
+}
+
+/* Estilos da Logo */
+.logo {
+    width: 50px;
+    height: auto;
+}
+
+/* Estilos do Conteúdo do Cabeçalho */
+.header-content {
+    text-align: center;
+    flex: 1;
+}
+
+.header-content h1 {
+    font-family: 'Righteous', sans-serif;
+    font-size: 24px;
+    margin: 0;
+}
+
+.header-content p {
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Ícone do Menu Hamburguer */
+.menu-icon {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.menu-icon span {
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    margin: 3px 0;
+    transition: all 0.3s ease;
+}
+
+/* Menu suspenso */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 10px 0;
+}
+
+.dropdown-menu li {
+    padding: 10px 20px;
+}
+
+.dropdown-menu li a {
+    text-decoration: none;
+    color: #333;
+}
+
+/* Exibir o menu quando ativado */
+.dropdown-menu.show {
+    display: block;
+}
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 92px;
+}
+
+header {
+    background: #C83A31;
+    padding: 20px;
+    text-align: center;
+    color: #fff;
+    position: fixed;
+    width: 100vw;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+header h1, header p {
+    margin: 0;
+}
+
+.secao {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.menu-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding-bottom: 10px;
+}
+
+.item {
+    width: 150px;
+    height: auto;
+    background: #FFFFFF;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease, transform 0.2s ease; /* Transição suave */
+}
+
+.item img {
+    width: 100%;
+    height: auto;
+    max-width: 120px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.finalizar-pedido {
+    background-color: #C83A31;
+    color: white;
+    padding: 20px;
+    font-size: 18px;
+    cursor: pointer;
+    position: fixed;
+    bottom: 10px;
+    width: calc(100% - 40px);
+    max-width: 400px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.modal-background, .modal-confirmacao {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-confirmacao {
+    background-color: #C83A31;
+    color: white;
+    border-radius: 9px;
+    padding: 20px;
+    width: 300px;
+}
+
+.modal-conteudo {
+    text-align: center;
+    color: white;
+}
