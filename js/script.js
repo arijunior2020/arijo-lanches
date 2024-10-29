@@ -183,7 +183,7 @@ if (sessionStorage.getItem("preferenceId")) {
   }, 5000);
 }
 
-
+window.verificarStatusPagamento = verificarStatusPagamento;
 
 // Adiciona os eventos para os botões de confirmação e cancelamento
 document.querySelector('.confirmar').addEventListener('click', enviarPedido);
