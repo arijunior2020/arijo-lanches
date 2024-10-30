@@ -116,8 +116,20 @@ async function enviarPedido() {
       // Abre o checkout do Mercado Pago usando o SDK
       mercadopago.checkout({
         preference: {
-          id: data.preferenceId
-        }
+          id: data.id
+        },
+        render: {
+          container: ".modal-confirmacao",
+          label: "Pagar",
+        },
+        modal: {
+          onOpen: () => {
+            document.querySelector(".modal-background").style.display = "block";
+          },
+          onClose: () => {
+            document.querySelector(".modal-background").style.display = "none";
+          },
+        },
       });
 
     } else {
