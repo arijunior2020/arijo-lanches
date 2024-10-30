@@ -131,7 +131,7 @@ async function enviarPedido() {
 // Função para verificar o status do pagamento na página de status (status.html)
 async function verificarStatusPagamento() {
   const urlParams = new URLSearchParams(window.location.search);
-  const preferenceId = urlParams.get("preferenceId");
+  const preferenceId = urlParams.get("preference-id");
   console.log("ID de pagamento recebido:", preferenceId);
 
   if (!preferenceId) {
