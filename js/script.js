@@ -131,64 +131,79 @@ async function enviarPedido() {
 // Função para verificar o status do pagamento na página de status (status.html)
 async function verificarStatusPagamento() {
   const urlParams = new URLSearchParams(window.location.search);
-  const preferenceId = urlParams.get("preference-id");
-  console.log("ID de pagamento recebido:", preferenceId);
+  const pedidoId = urlParams.get("pedidoId"); // Você pode passar o pedidoId na URL
+  console.log("ID do pedido recebido:", pedidoId);
 
-  if (!preferenceId) {
-    console.warn("Preference ID não encontrado.");
-    document.getElementById("status-text").innerText = "ID de pagamento não encontrado.";
-    return;
+  if (!pedidoId) {
+      console.warn("Pedido ID não encontrado.");
+      document.getElementById("status-text").innerText = "ID de pedido não encontrado.";
+      return;
   }
 
   try {
-    const response = await fetch(`https://arijolanches.com.br/status_pagamento/${preferenceId}`);
-    console.log("Resposta do backend para status do pagamento:", response);
+      // Buscando o preferenceId no banco de dados
+      const preferenceResponse = await fetch(`https://arijolanches.com.br/get_preference_id/${pedidoId}`);
+      const preferenceData = await preferenceResponse.json();
 
-    if (!response.ok) {
-      console.error("Erro na resposta do backend:", response.statusText);
-      document.getElementById("status-text").innerText = "Erro ao verificar status do pagamento.";
-      return;
-    }
+      if (!preferenceResponse.ok) {
+          console.error("Erro ao buscar preferenceId:", preferenceData.error);
+          document.getElementById("status-text").innerText = "Erro ao buscar preferenceId.";
+          return;
+      }
 
-    const data = await response.json();
-    console.log("Dados do status do pagamento recebidos:", data);
-    console.log("Status do pagamento recebido:", data.status); // Log do status do pagamento
+      const preferenceId = preferenceData.preferenceId;
+      console.log("Preference ID recebido:", preferenceId);
 
-    const statusText = document.getElementById("status-text");
-    if (data.status === "approved") {
-      statusText.innerText = "Pagamento confirmado! Obrigado pelo pedido.";
-      setTimeout(() => window.location.href = "https://arijo-lanches.vercel.app/success.html");
-    } else if (data.status === "pending") {
-      statusText.innerText = "Pagamento ainda pendente, verificando novamente...";
-    } else if (data.status === "rejected") {
-      statusText.innerText = "Pagamento foi rejeitado. Tente novamente.";
-      setTimeout(() => window.location.href = "https://arijo-lanches.vercel.app/failure.html");
-    } else {
-      console.warn("Status desconhecido:", data.status);
-      statusText.innerText = "Status do pagamento desconhecido.";
-    }
+      const response = await fetch(`https://arijolanches.com.br/status_pagamento/${preferenceId}`);
+      console.log("Resposta do backend para status do pagamento:", response);
+
+      if (!response.ok) {
+          console.error("Erro na resposta do backend:", response.statusText);
+          document.getElementById("status-text").innerText = "Erro ao verificar status do pagamento.";
+          return;
+      }
+
+      const data = await response.json();
+      console.log("Dados do status do pagamento recebidos:", data);
+      console.log("Status do pagamento recebido:", data.status); // Log do status do pagamento
+
+      const statusText = document.getElementById("status-text");
+      if (data.status === "approved") {
+          statusText.innerText = "Pagamento confirmado! Obrigado pelo pedido.";
+          setTimeout(() => window.location.href = "https://arijo-lanches.vercel.app/success.html");
+      } else if (data.status === "pending") {
+          statusText.innerText = "Pagamento ainda pendente, verificando novamente...";
+      } else if (data.status === "rejected") {
+          statusText.innerText = "Pagamento foi rejeitado. Tente novamente.";
+          setTimeout(() => window.location.href = "https://arijo-lanches.vercel.app/failure.html");
+      } else {
+          console.warn("Status desconhecido:", data.status);
+          statusText.innerText = "Status do pagamento desconhecido.";
+      }
   } catch (error) {
-    console.error("Erro ao verificar status do pagamento:", error);
-    document.getElementById("status-text").innerText = "Erro ao verificar status do pagamento.";
+      console.error("Erro ao verificar status do pagamento:", error);
+      document.getElementById("status-text").innerText = "Erro ao verificar status do pagamento.";
   }
 }
+
 
 // Verifica se está na página de status antes de chamar verificarStatusPagamento
 document.addEventListener("DOMContentLoaded", () => {
   if (window.location.pathname.includes("status.html")) {
-      verificarStatusPagamento();
+    verificarStatusPagamento();
   } else if (window.location.pathname.includes("checkout.html")) {
-      // Adiciona um listener para o evento de redirecionamento do Mercado Pago
-      window.addEventListener("message", (event) => {
-          if (event.origin === "https://www.mercadopago.com.br") {
-              const data = event.data;
-              if (data.type === "redirect") {
-                  window.location.href = data.url;
-              }
-          }
-      });
+    // Adiciona um listener para o evento de redirecionamento do Mercado Pago
+    window.addEventListener("message", (event) => {
+      if (event.origin === "https://www.mercadopago.com.br") {
+        const data = event.data;
+        if (data.type === "redirect") {
+          window.location.href = data.url;
+        }
+      }
+    });
   }
 });
+
 
 // Adiciona os eventos para os botões de confirmação e cancelamento
 document.querySelector('.confirmar').addEventListener('click', enviarPedido);
