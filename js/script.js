@@ -115,15 +115,8 @@ async function enviarPedido() {
 
     if (response.ok) {
       const data = await response.json();
-      
-      // Salva o preferenceId no backend para posterior verificação
-      await fetch("https://arijolanches.com.br/save_preference_id", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ preferenceId: data.preferenceId })
-      });
-      
-      // Redireciona para o checkout do Mercado Pago
+      localStorage.setItem("preferenceId", data.preferenceId); // Salva o preferenceId no localStorage
+      console.log("Preference ID salvo no localStorage:", localStorage.getItem("preferenceId"));
       window.location.href = data.init_point;
     } else {
       console.error("Erro na resposta da API:", response.status, response.statusText);
@@ -139,9 +132,9 @@ let intervaloVerificacao; // Variável global para o intervalo
 
 // Função para verificar o status do pagamento
 async function verificarStatusPagamento() {
-  const preferenceId = sessionStorage.getItem("preferenceId");
+  const preferenceId = localStorage.getItem("preferenceId");
   if (!preferenceId) {
-    console.warn("Preference ID não encontrado.");
+    console.warn("Preference ID não encontrado no localStorage.");
     return;
   }
 
@@ -157,12 +150,14 @@ async function verificarStatusPagamento() {
 
     if (data.status === "approved") {
       alert("Pagamento confirmado! Obrigado pelo pedido.");
+      localStorage.removeItem("preferenceId");
       clearInterval(intervaloVerificacao);
       window.location.href = "https://arijo-lanches.vercel.app/success.html";
     } else if (data.status === "pending") {
       console.log("Pagamento ainda pendente, verificando novamente...");
     } else if (data.status === "rejected") {
       alert("Pagamento foi rejeitado. Tente novamente.");
+      localStorage.removeItem("preferenceId");
       clearInterval(intervaloVerificacao);
       window.location.href = "https://arijo-lanches.vercel.app/failure.html";
     } else {
@@ -172,7 +167,6 @@ async function verificarStatusPagamento() {
     console.error("Erro ao verificar status do pagamento:", error);
   }
 }
-
 
 // Inicia a verificação de status a cada 5 segundos apenas se houver um preferenceId armazenado
 if (localStorage.getItem("preferenceId")) {
