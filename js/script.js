@@ -151,16 +151,17 @@ async function verificarStatusPagamento() {
 
     const data = await response.json();
     console.log("Dados do status do pagamento recebidos:", data);
+    console.log("Status do pagamento recebido:", data.status); // Log do status do pagamento
 
     const statusText = document.getElementById("status-text");
     if (data.status === "approved") {
       statusText.innerText = "Pagamento confirmado! Obrigado pelo pedido.";
-      setTimeout(() => window.location.href = "https://arijo-lanches.vercel.app/success.html", 3000);
+      setTimeout(() => window.location.href = "https://arijo-lanches.vercel.app/success.html");
     } else if (data.status === "pending") {
       statusText.innerText = "Pagamento ainda pendente, verificando novamente...";
     } else if (data.status === "rejected") {
       statusText.innerText = "Pagamento foi rejeitado. Tente novamente.";
-      setTimeout(() => window.location.href = "https://arijo-lanches.vercel.app/failure.html", 3000);
+      setTimeout(() => window.location.href = "https://arijo-lanches.vercel.app/failure.html");
     } else {
       console.warn("Status desconhecido:", data.status);
       statusText.innerText = "Status do pagamento desconhecido.";
