@@ -115,8 +115,8 @@ async function enviarPedido() {
 
     if (response.ok) {
       const data = await response.json();
-      // Redireciona para a página de status com preferenceId na URL
-      window.location.href = `https://arijo-lanches.vercel.app/status.html?preferenceId=${data.preferenceId}`;
+      // Redireciona o usuário para o checkout do Mercado Pago
+      window.location.href = data.init_point;
     } else {
       console.error("Erro na resposta da API:", response.status, response.statusText);
       alert("Erro ao criar a preferência de pagamento. Tente novamente.");
@@ -152,13 +152,11 @@ async function verificarStatusPagamento() {
     const statusText = document.getElementById("status-text");
     if (data.status === "approved") {
       statusText.innerText = "Pagamento confirmado! Obrigado pelo pedido.";
-      clearInterval(intervaloVerificacao); // Limpa o intervalo global
       setTimeout(() => window.location.href = "https://arijo-lanches.vercel.app/success.html", 3000);
     } else if (data.status === "pending") {
       statusText.innerText = "Pagamento ainda pendente, verificando novamente...";
     } else if (data.status === "rejected") {
       statusText.innerText = "Pagamento foi rejeitado. Tente novamente.";
-      clearInterval(intervaloVerificacao); // Limpa o intervalo global
       setTimeout(() => window.location.href = "https://arijo-lanches.vercel.app/failure.html", 3000);
     } else {
       console.warn("Status desconhecido:", data.status);
@@ -170,9 +168,11 @@ async function verificarStatusPagamento() {
   }
 }
 
-// Inicia a verificação do status automaticamente quando a página carregar
+// Verifica se está na página de status antes de chamar verificarStatusPagamento
 document.addEventListener("DOMContentLoaded", () => {
-  verificarStatusPagamento();
+  if (window.location.pathname.includes("status.html")) {
+    verificarStatusPagamento();
+  }
 });
 
 // Adiciona os eventos para os botões de confirmação e cancelamento
