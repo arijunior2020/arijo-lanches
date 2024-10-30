@@ -105,7 +105,7 @@ async function enviarPedido() {
   };
 
   try {
-    const response = await fetch("http://44.201.126.100/create_preference", {
+    const response = await fetch("https://arijolanches.com.br/create_preference", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -139,7 +139,7 @@ async function verificarStatusPagamento() {
   }
 
   try {
-    const response = await fetch(`http://44.201.126.100/status_pagamento/${preferenceId}`);
+    const response = await fetch(`https://arijolanches.com.br/status_pagamento/${preferenceId}`);
     if (!response.ok) {
       console.error("Erro na resposta do backend:", response.statusText);
       return;
