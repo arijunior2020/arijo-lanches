@@ -8,6 +8,8 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500&display=swap">
     <link rel="stylesheet" href="css/style.css">
+    <!-- Scripts do Mercado Pago e JavaScript principal -->
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
 </head>
 
 <body>
@@ -168,8 +170,7 @@
             <button class="cancelar" onclick="fecharModal()">Cancelar</button>
         </div>
     </div>
-    <!-- Scripts do Mercado Pago e JavaScript principal -->
-    <script src="https://sdk.mercadopago.com/js/v2"></script>
+
     <script>
         const mercadopago = new MercadoPago("APP_USR-fc9c75bb-342b-42dd-bc1e-fb7dc2a64d57", {
             locale: 'pt-BR'
