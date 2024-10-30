@@ -115,6 +115,7 @@ async function enviarPedido() {
 
     if (response.ok) {
       const data = await response.json();
+      console.log("Dados da resposta da criação de preferência:", data); // Adicionando um log para depuração
       // Redireciona o usuário para o checkout do Mercado Pago
       window.location.href = data.init_point;
     } else {
@@ -140,6 +141,8 @@ async function verificarStatusPagamento() {
 
   try {
     const response = await fetch(`https://arijolanches.com.br/status_pagamento/${preferenceId}`);
+    console.log("Resposta do backend para status do pagamento:", response);
+
     if (!response.ok) {
       console.error("Erro na resposta do backend:", response.statusText);
       document.getElementById("status-text").innerText = "Erro ao verificar status do pagamento.";
@@ -147,7 +150,7 @@ async function verificarStatusPagamento() {
     }
 
     const data = await response.json();
-    console.log("Status do pagamento recebido:", data.status);
+    console.log("Dados do status do pagamento recebidos:", data);
 
     const statusText = document.getElementById("status-text");
     if (data.status === "approved") {
