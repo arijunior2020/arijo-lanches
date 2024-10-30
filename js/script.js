@@ -1,9 +1,5 @@
 // Variáveis globais
 let pedido = [];
-const chavePix = "66814243334";
-const tipoChavePix = "CPF";
-const banco = "Santander";
-const titular = "JOSE ARIMATEIA RODRIGUES JUNIOR";
 let taxaEntrega = 0;
 
 const botaoFinalizar = document.querySelector('.finalizar-pedido');
@@ -141,51 +137,32 @@ async function verificarStatusPagamento() {
   }
 
   try {
-      // Buscando o preferenceId no banco de dados
-      const preferenceResponse = await fetch(`https://arijolanches.com.br/get_preference_id/${pedidoId}`);
-      const preferenceData = await preferenceResponse.json();
+      const response = await fetch(`https://arijolanches.com.br/status_pagamento/${pedidoId}`);
+      const data = await response.json();
 
-      if (!preferenceResponse.ok) {
-          console.error("Erro ao buscar preferenceId:", preferenceData.error);
-          document.getElementById("status-text").innerText = "Erro ao buscar preferenceId.";
-          return;
-      }
-
-      const preferenceId = preferenceData.preferenceId;
-      console.log("Preference ID recebido:", preferenceId);
-
-      const response = await fetch(`https://arijolanches.com.br/status_pagamento/${preferenceId}`);
-      console.log("Resposta do backend para status do pagamento:", response);
-
-      if (!response.ok) {
+      if (response.ok) {
+          const statusText = document.getElementById("status-text");
+          if (data.status === "approved") {
+              statusText.innerText = "Pagamento confirmado! Obrigado pelo pedido.";
+              setTimeout(() => window.location.href = `https://arijo-lanches.vercel.app/success.html?pedidoId=${pedidoId}`, 2000);
+          } else if (data.status === "pending") {
+              statusText.innerText = "Pagamento ainda pendente, verificando novamente...";
+          } else if (data.status === "rejected") {
+              statusText.innerText = "Pagamento foi rejeitado. Tente novamente.";
+              setTimeout(() => window.location.href = `https://arijo-lanches.vercel.app/failure.html?pedidoId=${pedidoId}`, 2000);
+          } else {
+              console.warn("Status desconhecido:", data.status);
+              statusText.innerText = "Status do pagamento desconhecido.";
+          }
+      } else {
           console.error("Erro na resposta do backend:", response.statusText);
           document.getElementById("status-text").innerText = "Erro ao verificar status do pagamento.";
-          return;
-      }
-
-      const data = await response.json();
-      console.log("Dados do status do pagamento recebidos:", data);
-      console.log("Status do pagamento recebido:", data.status); // Log do status do pagamento
-
-      const statusText = document.getElementById("status-text");
-      if (data.status === "approved") {
-          statusText.innerText = "Pagamento confirmado! Obrigado pelo pedido.";
-          setTimeout(() => window.location.href = "https://arijo-lanches.vercel.app/success.html");
-      } else if (data.status === "pending") {
-          statusText.innerText = "Pagamento ainda pendente, verificando novamente...";
-      } else if (data.status === "rejected") {
-          statusText.innerText = "Pagamento foi rejeitado. Tente novamente.";
-          setTimeout(() => window.location.href = "https://arijo-lanches.vercel.app/failure.html");
-      } else {
-          console.warn("Status desconhecido:", data.status);
-          statusText.innerText = "Status do pagamento desconhecido.";
       }
   } catch (error) {
       console.error("Erro ao verificar status do pagamento:", error);
       document.getElementById("status-text").innerText = "Erro ao verificar status do pagamento.";
   }
 }
-
 
 // Verifica se está na página de status antes de chamar verificarStatusPagamento
 document.addEventListener("DOMContentLoaded", () => {
@@ -203,7 +180,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-
 
 // Adiciona os eventos para os botões de confirmação e cancelamento
 document.querySelector('.confirmar').addEventListener('click', enviarPedido);
