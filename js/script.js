@@ -175,7 +175,17 @@ async function verificarStatusPagamento() {
 // Verifica se está na página de status antes de chamar verificarStatusPagamento
 document.addEventListener("DOMContentLoaded", () => {
   if (window.location.pathname.includes("status.html")) {
-    verificarStatusPagamento();
+      verificarStatusPagamento();
+  } else if (window.location.pathname.includes("checkout.html")) {
+      // Adiciona um listener para o evento de redirecionamento do Mercado Pago
+      window.addEventListener("message", (event) => {
+          if (event.origin === "https://www.mercadopago.com.br") {
+              const data = event.data;
+              if (data.type === "redirect") {
+                  window.location.href = data.url;
+              }
+          }
+      });
   }
 });
 
