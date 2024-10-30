@@ -115,8 +115,8 @@ async function enviarPedido() {
 
     if (response.ok) {
       const data = await response.json();
-      localStorage.setItem("preferenceId", data.preferenceId); // Salva o preferenceId no localStorage
-      console.log("Preference ID salvo no localStorage:", localStorage.getItem("preferenceId"));
+      sessionStorage.setItem("preferenceId", data.preferenceId); // Use data.preferenceId ao invés de data.id
+      console.log("Preference ID salvo no sessionStorage:", sessionStorage.getItem("preferenceId")); // Log para depuração
       window.location.href = data.init_point;
     } else {
       console.error("Erro na resposta da API:", response.status, response.statusText);
@@ -132,9 +132,9 @@ let intervaloVerificacao; // Variável global para o intervalo
 
 // Função para verificar o status do pagamento
 async function verificarStatusPagamento() {
-  const preferenceId = localStorage.getItem("preferenceId");
+  const preferenceId = sessionStorage.getItem("preferenceId");
   if (!preferenceId) {
-    console.warn("Preference ID não encontrado no localStorage.");
+    console.warn("Preference ID não encontrado no sessionStorage.");
     return;
   }
 
@@ -146,19 +146,19 @@ async function verificarStatusPagamento() {
     }
 
     const data = await response.json();
-    console.log("Status do pagamento recebido:", data.status);
+    console.log("Status do pagamento recebido:", data.status); // Log para depuração
 
     if (data.status === "approved") {
       alert("Pagamento confirmado! Obrigado pelo pedido.");
-      localStorage.removeItem("preferenceId");
-      clearInterval(intervaloVerificacao);
+      sessionStorage.removeItem("preferenceId");
+      clearInterval(intervaloVerificacao); // Limpa o intervalo global
       window.location.href = "https://arijo-lanches.vercel.app/success.html";
     } else if (data.status === "pending") {
       console.log("Pagamento ainda pendente, verificando novamente...");
     } else if (data.status === "rejected") {
       alert("Pagamento foi rejeitado. Tente novamente.");
-      localStorage.removeItem("preferenceId");
-      clearInterval(intervaloVerificacao);
+      sessionStorage.removeItem("preferenceId");
+      clearInterval(intervaloVerificacao); // Limpa o intervalo global
       window.location.href = "https://arijo-lanches.vercel.app/failure.html";
     } else {
       console.warn("Status desconhecido:", data.status);
@@ -169,13 +169,14 @@ async function verificarStatusPagamento() {
 }
 
 // Inicia a verificação de status a cada 5 segundos apenas se houver um preferenceId armazenado
-if (localStorage.getItem("preferenceId")) {
+if (sessionStorage.getItem("preferenceId")) {
   let verificacoes = 0;
   intervaloVerificacao = setInterval(() => {
     verificarStatusPagamento();
     verificacoes++;
 
-    if (verificacoes >= 30 || !localStorage.getItem("preferenceId")) {
+    // Cancela a verificação após 30 tentativas (aproximadamente 2.5 minutos)
+    if (verificacoes >= 30 || !sessionStorage.getItem("preferenceId")) {
       console.log("Cancelando verificação de status do pagamento após 30 tentativas.");
       clearInterval(intervaloVerificacao);
     }
