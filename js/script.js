@@ -105,7 +105,7 @@ async function enviarPedido() {
   };
 
   try {
-    const response = await fetch("https://311f-45-186-134-166.ngrok-free.app/create_preference", {
+    const response = await fetch("http://44.201.126.100/create_preference", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -139,7 +139,7 @@ async function verificarStatusPagamento() {
   }
 
   try {
-    const response = await fetch(`https://311f-45-186-134-166.ngrok-free.app/status_pagamento/${preferenceId}`);
+    const response = await fetch(`http://44.201.126.100/status_pagamento/${preferenceId}`);
     if (!response.ok) {
       console.error("Erro na resposta do backend:", response.statusText);
       return;
