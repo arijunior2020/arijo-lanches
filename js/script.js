@@ -132,6 +132,7 @@ async function enviarPedido() {
 async function verificarStatusPagamento() {
   const urlParams = new URLSearchParams(window.location.search);
   const preferenceId = urlParams.get("preferenceId");
+  console.log("ID de pagamento recebido:", preferenceId);
 
   if (!preferenceId) {
     console.warn("Preference ID não encontrado.");
