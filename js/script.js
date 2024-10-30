@@ -117,9 +117,7 @@ async function enviarPedido() {
       mercadopago.checkout({
         preference: {
           id: data.preferenceId
-        },
-        autoOpen: true, // Abre o checkout automaticamente
-        // Você pode adicionar configurações adicionais aqui
+        }
       });
 
     } else {
