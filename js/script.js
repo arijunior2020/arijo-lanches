@@ -46,7 +46,7 @@ function confirmarPedido() {
 
   botaoFinalizar.style.display = 'none';
   modal.style.display = 'flex';
-  background.style.display = 'block'; // Exibe o fundo embaraçado
+  background.style.display = 'block';
 }
 
 // Função para fechar o modal e esconder o fundo embaraçado
@@ -115,9 +115,7 @@ async function enviarPedido() {
 
     if (response.ok) {
       const data = await response.json();
-      sessionStorage.setItem("preferenceId", data.preferenceId); // Use data.preferenceId ao invés de data.id
-      console.log("Preference ID salvo no sessionStorage:", sessionStorage.getItem("preferenceId")); // Log para depuração
-      window.location.href = data.init_point;
+      window.location.href = data.init_point;  // Redireciona o usuário para o checkout do Mercado Pago
     } else {
       console.error("Erro na resposta da API:", response.status, response.statusText);
       alert("Erro ao criar a preferência de pagamento. Tente novamente.");
@@ -128,13 +126,13 @@ async function enviarPedido() {
   }
 }
 
-let intervaloVerificacao; // Variável global para o intervalo
-
-// Função para verificar o status do pagamento
+// Função para verificar o status do pagamento na página de status (status.html)
 async function verificarStatusPagamento() {
-  const preferenceId = sessionStorage.getItem("preferenceId");
+  const urlParams = new URLSearchParams(window.location.search);
+  const preferenceId = urlParams.get("preferenceId");
+
   if (!preferenceId) {
-    console.warn("Preference ID não encontrado no sessionStorage.");
+    console.warn("Preference ID não encontrado.");
     return;
   }
 
@@ -146,18 +144,16 @@ async function verificarStatusPagamento() {
     }
 
     const data = await response.json();
-    console.log("Status do pagamento recebido:", data.status); // Log para depuração
+    console.log("Status do pagamento recebido:", data.status);
 
     if (data.status === "approved") {
       alert("Pagamento confirmado! Obrigado pelo pedido.");
-      sessionStorage.removeItem("preferenceId");
       clearInterval(intervaloVerificacao); // Limpa o intervalo global
       window.location.href = "https://arijo-lanches.vercel.app/success.html";
     } else if (data.status === "pending") {
       console.log("Pagamento ainda pendente, verificando novamente...");
     } else if (data.status === "rejected") {
       alert("Pagamento foi rejeitado. Tente novamente.");
-      sessionStorage.removeItem("preferenceId");
       clearInterval(intervaloVerificacao); // Limpa o intervalo global
       window.location.href = "https://arijo-lanches.vercel.app/failure.html";
     } else {
@@ -168,22 +164,8 @@ async function verificarStatusPagamento() {
   }
 }
 
-// Inicia a verificação de status a cada 5 segundos apenas se houver um preferenceId armazenado
-if (sessionStorage.getItem("preferenceId")) {
-  let verificacoes = 0;
-  intervaloVerificacao = setInterval(() => {
-    verificarStatusPagamento();
-    verificacoes++;
-
-    // Cancela a verificação após 30 tentativas (aproximadamente 2.5 minutos)
-    if (verificacoes >= 30 || !sessionStorage.getItem("preferenceId")) {
-      console.log("Cancelando verificação de status do pagamento após 30 tentativas.");
-      clearInterval(intervaloVerificacao);
-    }
-  }, 5000);
-}
-
-window.verificarStatusPagamento = verificarStatusPagamento;
+// Configuração para iniciar a verificação de status do pagamento a cada 5 segundos
+let intervaloVerificacao = setInterval(verificarStatusPagamento, 5000);
 
 // Adiciona os eventos para os botões de confirmação e cancelamento
 document.querySelector('.confirmar').addEventListener('click', enviarPedido);
