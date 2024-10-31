@@ -1,107 +1,148 @@
-/* Estilos gerais */
+/* Reseta e estilos básicos */
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #f8f8f8;
-    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Cabeçalho */
 header {
-    background-color: #C83A31; /* Mesma cor vermelha do tema */
-    padding: 20px;
-    text-align: center;
-    color: #fff;
-}
-
-header h1 {
-    font-family: 'Righteous', sans-serif;
-    font-size: 28px;
-    margin: 0;
-}
-
-/* Conteúdo principal */
-.content {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Estilos das Seções */
-.contact-section, .address-section {
-    margin-bottom: 20px;
-    padding: 10px;
-    text-align: center;
-}
-
-.contact-section h2, .address-section h2 {
-    font-family: 'Righteous', sans-serif;
-    color: #C83A31;
-    font-size: 22px;
-    margin-bottom: 10px;
-}
-
-.contact-section p, .address-section p {
-    font-size: 18px;
-    color: #333;
-}
-
-.contact-section a {
-    color: #C83A31;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.contact-section a:hover {
-    text-decoration: underline;
-}
-
-/* Botão Voltar com ícone */
-.back-home-button {
+    width: 100%;
+    background-color: #C83A31;
+    padding: 10px 20px;
     display: flex;
     align-items: center;
-    text-decoration: none;
-    color: white;
-    background-color: #C83A31; /* Cor vermelha do tema */
-    padding: 10px 20px;
-    font-size: 18px;
-    font-weight: 500;
+    justify-content: space-between;
+    color: #fff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 50px;
+    height: auto;
+    margin-right: 15px;
+}
+
+h1 {
+    font-family: 'Righteous', sans-serif;
+    font-size: 24px;
+}
+
+/* Menu hamburguer */
+.menu-icon {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.menu-icon span {
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    margin: 3px 0;
+    transition: all 0.3s ease;
+}
+
+/* Menu dropdown */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background-color: #fff;
     border-radius: 8px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    transition: background-color 0.3s, transform 0.2s;
-    justify-content: center; /* Centraliza o conteúdo do botão */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+}
+
+.dropdown-menu ul {
+    list-style: none;
+    padding: 10px 0;
+}
+
+.dropdown-menu li {
+    padding: 10px 20px;
+}
+
+.dropdown-menu li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.content {
+    max-width: 800px;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    margin-top: 70px;
+}
+
+.contact-section, .address-section, .back-home-section, .map-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contact-section a, .address-section a {
+    color: #C83A31;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.back-home-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #C83A31;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 200px;
     margin: 0 auto;
+    transition: background-color 0.3s;
 }
 
 .back-home-button:hover {
-    background-color: #a62927; /* Vermelho escuro para o hover */
-    transform: scale(1.05); /* Efeito de aumento no hover */
+    background-color: #a32e26;
 }
 
-/* Ícone de seta */
-.back-home-button .icon {
-    font-size: 20px;
-    margin-right: 10px;
+.icon {
+    margin-right: 5px;
 }
 
-/* Seção do mapa */
-.map-section {
-    text-align: center;
-    margin: 20px auto;
-    max-width: 600px;
-}
+/* Responsividade */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 20px;
+    }
 
-.map-section h2 {
-    font-family: 'Righteous', sans-serif;
-    color: #C83A31;
-    font-size: 22px;
-    margin-bottom: 10px;
+    .logo {
+        width: 40px;
+    }
+
+    .back-home-button {
+        font-size: 14px;
+    }
 }
