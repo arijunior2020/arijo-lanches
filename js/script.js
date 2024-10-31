@@ -36,6 +36,8 @@ function confirmarPedido() {
     const modal = document.querySelector('.modal-confirmacao');
     const background = document.querySelector('.modal-background');
     const resumoPedido = document.querySelector('.resumo-pedido');
+    const container = document.querySelector('.container');
+
     resumoPedido.innerHTML = '';
     let total = 0;
 
@@ -48,12 +50,15 @@ function confirmarPedido() {
     botaoFinalizar.style.display = 'none';
     modal.style.display = 'flex';
     background.style.display = 'block';
+    container.classList.add('blur'); // Adiciona o efeito de desfoque ao conteúdo principal
 }
 
 // Função para fechar o modal e exibir o botão novamente
 function cancelarPedido() {
+    const container = document.querySelector('.container');
     document.querySelector('.modal-confirmacao').style.display = 'none';
     document.querySelector('.modal-background').style.display = 'none';
+    container.classList.remove('blur'); // Remove o efeito de desfoque do conteúdo principal
     atualizarVisibilidadeBotao();
 }
 
@@ -92,13 +97,31 @@ function calcularTaxaEntrega(event) {
     resumoPedido.innerHTML += `<p><strong>Total com entrega: R$ ${total.toFixed(2)}</strong></p>`;
 }
 
-// Função para enviar o pedido via WhatsApp
+// Função para exibir mensagem de erro estilizada
+function exibirErro(mensagem) {
+    const erro = document.createElement('div');
+    erro.classList.add('erro-mensagem');
+    erro.innerText = mensagem;
+    document.body.appendChild(erro);
+
+    setTimeout(() => {
+        erro.remove();
+    }, 3000); // Remove a mensagem de erro após 3 segundos
+}
+
+// Função para verificar campos e enviar o pedido via WhatsApp
 function enviarPedido() {
+    const bairro = document.getElementById("bairro").value.trim();
+    const endereco = document.getElementById("endereco").value.trim();
+
+    // Verifica se os campos obrigatórios estão preenchidos
+    if (!bairro || !endereco) {
+        exibirErro("Por favor, preencha o bairro e o endereço antes de prosseguir!");
+        return;
+    }
+
     let mensagemPedido = "*Olá, gostaria de fazer o pedido:*\n\n";
     let total = pedido.reduce((acc, item) => acc + item.preco, 0); // Calcula o total inicial
-
-    const bairro = document.getElementById("bairro").value.trim().toLowerCase();
-    const endereco = document.getElementById("endereco").value.trim();
 
     pedido.forEach(item => {
         mensagemPedido += `- *${item.nome}:* R$ ${item.preco.toFixed(2)}\n`;
