@@ -157,9 +157,51 @@ function enviarPedido() {
   mensagemPedido += `- *Titular:* ${titular}\n\n`;
   mensagemPedido += `*Obrigado por escolher Ari Jo Lanches!*`;
 
+  // URL para envio do pedido via WhatsApp
   const urlPedido = `https://api.whatsapp.com/send?phone=5585987764006&text=${encodeURIComponent(mensagemPedido)}`;
   window.open(urlPedido, '_blank');
+
+  // Exibe a confirmação de que o pedido foi enviado com sucesso
+  exibirConfirmacao("Pedido confirmado e enviado para o WhatsApp! Por favor, realize o pagamento via PIX ou em dinheiro na entrega.");
+
+  // Limpa o pedido, fecha o modal e reseta a seleção visual
+  pedido = [];
+  escolhaMassa = { tipo: null, molho: null, ingredientes: [] };
+  atualizarResumoPedido();
+  atualizarVisibilidadeBotao();
+  cancelarPedido(); // Fecha o modal de confirmação
+
+  // Limpa as seleções visuais de todos os itens
+  document.querySelectorAll('.menu-items .item').forEach(item => item.classList.remove('selecionado'));
 }
+
+// Função para exibir a confirmação de pedido enviado
+function exibirConfirmacao(mensagem) {
+  const confirmacao = document.createElement('div');
+  confirmacao.classList.add('confirmacao-mensagem');
+  confirmacao.innerText = mensagem;
+  document.body.appendChild(confirmacao);
+
+  // Remove a mensagem após 5 segundos
+  setTimeout(() => {
+    confirmacao.remove();
+  }, 5000);
+}
+
+
+// Função para exibir a confirmação de pedido enviado
+function exibirConfirmacao(mensagem) {
+  const confirmacao = document.createElement('div');
+  confirmacao.classList.add('confirmacao-mensagem');
+  confirmacao.innerText = mensagem;
+  document.body.appendChild(confirmacao);
+
+  // Remove a mensagem após 3 segundos
+  setTimeout(() => {
+    confirmacao.remove();
+  }, 3000);
+}
+
 
 
 // Funções para abrir e fechar o modal de massas
