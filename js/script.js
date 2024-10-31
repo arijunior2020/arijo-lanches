@@ -82,13 +82,13 @@ function calcularTaxaEntrega(event) {
 
   // Verifica se o bairro é atendido
   if (bairro === "araturi" || bairro === "arianopolis") {
-      taxaEntrega = 2.00;
-      taxaEntregaTexto.innerText = "Taxa de entrega: R$ 2,00";
+      taxaEntrega = 0.00;
+      taxaEntregaTexto.innerText = "Taxa de entrega: R$ 0,00";
       taxaEntregaTexto.style.color = "#7DDA58";
       botaoConfirmar.disabled = false; // Habilita o botão de confirmação do pedido
   } else if (bairro === "jurema" || bairro === "metropole") {
-      taxaEntrega = 3.00;
-      taxaEntregaTexto.innerText = "Taxa de entrega: R$ 3,00";
+      taxaEntrega = 0.00;
+      taxaEntregaTexto.innerText = "Taxa de entrega: R$ 0,00";
       taxaEntregaTexto.style.color = "#7DDA58";
       botaoConfirmar.disabled = false; // Habilita o botão de confirmação do pedido
   } else {
