@@ -327,7 +327,7 @@ header {
         padding: 15px;
         position: fixed;
         top: 50%;
-        left: 45.5%;
+        left: 50%;
         transform: translate(-50%, -50%);
     }
 
@@ -344,7 +344,7 @@ header {
 .erro-mensagem {
     position: fixed;
     top: 40px;
-    left: 45.5%;
+    left: 50%;
     transform: translateX(-50%);
     background-color: #ff4444;
     color: #fff;
