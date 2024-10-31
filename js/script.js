@@ -248,6 +248,7 @@ function confirmarEscolhaMassa() {
     document.querySelector('.menu-items .item.massa').classList.add('selecionado');
 
     atualizarResumoPedido();
+    atualizarVisibilidadeBotao();
     fecharModalMassa();
   } else {
     exibirErroEstilizado("Por favor, escolha uma massa e um molho!");
