@@ -69,35 +69,45 @@ function cancelarPedido() {
   atualizarVisibilidadeBotao();
 }
 
-// Função para calcular a taxa de entrega com base no bairro
+// Função para calcular a taxa de entrega com base no bairro e atualizar o total no modal
 function calcularTaxaEntrega(event) {
-  event.preventDefault();
+  event.preventDefault(); // Previne o comportamento padrão de envio
 
   const bairro = document.getElementById("bairro").value.trim().toLowerCase();
   const taxaEntregaTexto = document.getElementById("taxa-entrega");
-  let total = pedido.reduce((acc, item) => acc + item.preco, 0);
+  const botaoConfirmar = document.querySelector('.confirmar'); // Botão "Tudo certo, pode pedir!"
+  let total = pedido.reduce((acc, item) => acc + item.preco, 0); // Calcula o total inicial
 
+  // Verifica se o bairro é atendido
   if (bairro === "araturi" || bairro === "arianopolis") {
-    taxaEntrega = 2.00;
-    taxaEntregaTexto.innerText = "Taxa de entrega: R$ 2,00";
-    taxaEntregaTexto.style.color = "#7DDA58";
+      taxaEntrega = 2.00;
+      taxaEntregaTexto.innerText = "Taxa de entrega: R$ 2,00";
+      taxaEntregaTexto.style.color = "#7DDA58";
+      botaoConfirmar.disabled = false; // Habilita o botão de confirmação do pedido
   } else if (bairro === "jurema" || bairro === "metropole") {
-    taxaEntrega = 3.00;
-    taxaEntregaTexto.innerText = "Taxa de entrega: R$ 3,00";
-    taxaEntregaTexto.style.color = "#7DDA58";
+      taxaEntrega = 3.00;
+      taxaEntregaTexto.innerText = "Taxa de entrega: R$ 3,00";
+      taxaEntregaTexto.style.color = "#7DDA58";
+      botaoConfirmar.disabled = false; // Habilita o botão de confirmação do pedido
   } else {
-    taxaEntrega = 0;
-    taxaEntregaTexto.innerText = "Bairro fora da área de entrega.";
-    taxaEntregaTexto.style.color = "#FFDE59";
-    return;
+      taxaEntrega = 0;
+      taxaEntregaTexto.innerText = "Bairro fora da área de entrega.";
+      taxaEntregaTexto.style.color = "#FFDE59";
+      
+      // Exibe o alerta estilizado informando que o bairro não é atendido
+      exibirErroEstilizado("Bairro fora da área de entrega. Por favor, escolha um bairro válido.");
+      
+      botaoConfirmar.disabled = true; // Desabilita o botão de confirmação do pedido
+      return; // Não prossegue com o cálculo se o bairro estiver fora da área de entrega
   }
 
-  total += taxaEntrega;
+  total += taxaEntrega; // Adiciona a taxa de entrega ao total
 
+  // Atualiza o total no modal
   const resumoPedido = document.querySelector('.resumo-pedido');
   resumoPedido.innerHTML = '';
   pedido.forEach(item => {
-    resumoPedido.innerHTML += `<p>${item.nome} - R$ ${item.preco.toFixed(2)}</p>`;
+      resumoPedido.innerHTML += `<p>${item.nome} - R$ ${item.preco.toFixed(2)}</p>`;
   });
   resumoPedido.innerHTML += `<p>Taxa de entrega: R$ ${taxaEntrega.toFixed(2)}</p>`;
   resumoPedido.innerHTML += `<p><strong>Total com entrega: R$ ${total.toFixed(2)}</strong></p>`;

@@ -422,3 +422,9 @@ header {
     z-index: 1001; /* Coloca a mensagem acima do modal */
     animation: fadeInOut 3s;
 }
+
+.confirmar:disabled {
+    background-color: #b5b5b5; /* Cor mais clara para o botão desabilitado */
+    cursor: not-allowed; /* Muda o cursor para indicar que não está clicável */
+    opacity: 0.6; /* Torna o botão mais transparente */
+}
