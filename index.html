@@ -102,7 +102,7 @@
             <section class="secao">
                 <h2>Massas</h2>
                 <div class="menu-items">
-                    <div class="item" onclick="adicionarItem('Massa', 16.00, this)">
+                    <div class="item massa" onclick="abrirModalMassa()">
                         <img src="img/massas.webp" alt="Massas">
                         <h3>Massa</h3>
                         <p>Molho à escolha</p>
@@ -176,6 +176,37 @@
             <button class="cancelar" onclick="cancelarPedido()">
                 <span class="icon">&#10006;</span> Cancelar
             </button>
+        </div>
+    </div>
+
+    <!-- Modal de opções de Massas -->
+    <div class="modal-massa">
+        <div class="modal-conteudo">
+            <h2>Escolha seu Pedido:</h2>
+            <p><strong>Massas (R$ 16,00)</strong></p>
+
+            <div class="form-massa">
+                <h3>Escolha a Massa:</h3>
+                <label><input type="checkbox" name="massa" value="Espaguete"> Espaguete</label>
+                <label><input type="checkbox" name="massa" value="Penne"> Penne</label>
+            </div>
+
+            <div class="form-molho">
+                <h3>Escolha o Molho:</h3>
+                <label><input type="checkbox" name="molho" value="Bolonhesa"> Bolonhesa</label>
+                <label><input type="checkbox" name="molho" value="Branco"> Branco</label>
+            </div>
+
+            <div class="form-ingredientes">
+                <h3>Escolha até 8 Ingredientes:</h3>
+                <label><input type="checkbox" name="ingrediente" value="Calabresa"> Calabresa</label>
+                <label><input type="checkbox" name="ingrediente" value="Mussarela"> Mussarela</label>
+                <label><input type="checkbox" name="ingrediente" value="Bacon"> Bacon</label>
+                <!-- Adicione os outros ingredientes aqui -->
+            </div>
+
+            <button class="confirmar" onclick="confirmarEscolhaMassa()">OK</button>
+            <button class="cancelar" onclick="fecharModalMassa()">Cancelar</button>
         </div>
     </div>
 

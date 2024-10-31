@@ -356,3 +356,53 @@ header {
     animation: fadeInOut 3s;
 }
 }
+
+.modal-massa {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    max-width: 400px;
+    background-color: #C83A31;
+    border-radius: 15px;
+    padding: 20px;
+    display: none; /* Começa escondido */
+    z-index: 1001;
+    color: white;
+}
+
+.modal-massa .modal-conteudo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.modal-massa h2, .modal-massa h3 {
+    color: #ffffff;
+}
+
+.modal-massa label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.modal-massa .confirmar,
+.modal-massa .cancelar {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.modal-massa .confirmar {
+    background-color: #32B72F;
+    color: #fff;
+}
+
+.modal-massa .cancelar {
+    background-color: #b5b5b5;
+    color: #fff;
+}
