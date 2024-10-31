@@ -149,10 +149,10 @@ function enviarPedido() {
 
   // Verifica se o item "Massas" está no pedido antes de adicionar as escolhas de massas
   const massaNoPedido = pedido.find(item => item.nome === "Massas");
-  if (massaNoPedido && escolhaMassa.tipo && escolhaMassa.molho) {
+  if (massaNoPedido && escolhaMassa.tipo && escolhaMassa.molho.length > 0) {
     mensagemPedido += `\n*Opções de Massas:*\n`;
     mensagemPedido += `- Massa: ${escolhaMassa.tipo}\n`;
-    mensagemPedido += `- Molho: ${escolhaMassa.molho}\n`;
+    mensagemPedido += `- Molhos: ${escolhaMassa.molho.join(', ')}\n`; // Envia todos os molhos selecionados
     if (escolhaMassa.ingredientes.length > 0) {
       mensagemPedido += `- Ingredientes: ${escolhaMassa.ingredientes.join(', ')}\n`;
     }
@@ -180,7 +180,7 @@ function enviarPedido() {
 
   // Limpa o pedido, fecha o modal e reseta a seleção visual
   pedido = [];
-  escolhaMassa = { tipo: null, molho: null, ingredientes: [] };
+  escolhaMassa = { tipo: null, molho: [], ingredientes: [] }; // Reseta os molhos como array
   atualizarResumoPedido();
   atualizarVisibilidadeBotao();
   cancelarPedido(); // Fecha o modal de confirmação
@@ -261,12 +261,12 @@ document.querySelectorAll('input[name="ingrediente"]').forEach(checkbox => {
 // Função para confirmar a escolha de massas e fechar o modal
 function confirmarEscolhaMassa() {
   const massaEscolhida = document.querySelector('input[name="massa"]:checked');
-  const molhoEscolhido = document.querySelector('input[name="molho"]:checked');
+  const molhosEscolhidos = document.querySelectorAll('input[name="molho"]:checked');
   const ingredientesSelecionados = document.querySelectorAll('input[name="ingrediente"]:checked');
   const acompanhamentosSelecionados = document.querySelectorAll('input[name="acompanhamento"]:checked');
 
   // Verifica se todas as opções estão desmarcadas
-  if (!massaEscolhida && !molhoEscolhido && ingredientesSelecionados.length === 0 && acompanhamentosSelecionados.length === 0) {
+  if (!massaEscolhida && molhosEscolhidos.length === 0 && ingredientesSelecionados.length === 0 && acompanhamentosSelecionados.length === 0) {
     // Se nada está selecionado, remove "Massas" do pedido e desmarca visualmente
     pedido = pedido.filter(item => item.nome !== "Massas");
     document.querySelector('.menu-items .item.massa').classList.remove('selecionado');
@@ -275,11 +275,11 @@ function confirmarEscolhaMassa() {
     return;
   }
 
-  // Se há seleções de massa e molho, processa normalmente
-  if (massaEscolhida && molhoEscolhido) {
+  // Se há uma seleção de massa e algum molho, processa normalmente
+  if (massaEscolhida && molhosEscolhidos.length > 0) {
     // Armazena as escolhas na variável global
     escolhaMassa.tipo = massaEscolhida.value;
-    escolhaMassa.molho = molhoEscolhido.value;
+    escolhaMassa.molho = Array.from(molhosEscolhidos).map(molho => molho.value); // Captura todos os molhos selecionados
     escolhaMassa.ingredientes = Array.from(ingredientesSelecionados).map(ing => ing.value);
     escolhaMassa.acompanhamentos = Array.from(acompanhamentosSelecionados).map(acomp => acomp.value);
 
@@ -297,7 +297,7 @@ function confirmarEscolhaMassa() {
     fecharModalMassa();
   } else {
     // Exibe erro se massa ou molho não foi escolhido
-    exibirErroEstilizado("Por favor, escolha uma massa e um molho!");
+    exibirErroEstilizado("Por favor, escolha uma massa e ao menos um molho!");
   }
 }
 
