@@ -132,6 +132,7 @@ function enviarPedido() {
   const nome = document.getElementById("nome").value.trim();
   const bairro = document.getElementById("bairro").value.trim();
   const endereco = document.getElementById("endereco").value.trim();
+  const observacao = document.getElementById("observacao").value.trim();
 
   // Verifica se os campos de nome, bairro e endereço estão preenchidos
   if (!nome || !bairro || !endereco) {
@@ -164,6 +165,7 @@ function enviarPedido() {
   mensagemPedido += `- *Nome:* ${nome}\n`;
   mensagemPedido += `- *Endereço:* ${endereco}\n`;
   mensagemPedido += `- *Bairro:* ${bairro}\n`;
+  mensagemPedido += `- *Observação:* ${observacao}\n\n`;
   mensagemPedido += `*Para pagamento via PIX:*\n`;
   mensagemPedido += `- *Tipo da Chave:* ${tipoChavePix}\n`;
   mensagemPedido += `- *Chave PIX:* ${chavePix}\n`;
