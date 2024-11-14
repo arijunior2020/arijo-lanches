@@ -455,6 +455,36 @@ header {
     background-color: #cc0000;
 }
 
+/* Estilização do campo de seleção (select) */
+.form-endereco select {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    background-color: #ffffff; /* Fundo branco */
+    color: #333; /* Cor do texto */
+    appearance: none; /* Remove o estilo padrão do navegador */
+    -webkit-appearance: none; /* Compatibilidade com Safari */
+    -moz-appearance: none; /* Compatibilidade com Firefox */
+}
+
+/* Adiciona uma seta personalizada ao select */
+.form-endereco select {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%23333"><polygon points="7,10 12,15 17,10"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+}
+
+/* Estilo para quando o select estiver focado */
+.form-endereco select:focus {
+    outline: none;
+    border-color: #C83A31; /* Cor de destaque ao focar */
+    box-shadow: 0 0 5px rgba(200, 58, 49, 0.5); /* Sombra suave */
+}
+
 /* Animação de entrada e saída */
 @keyframes fadeInOut {
     0% { opacity: 0; }

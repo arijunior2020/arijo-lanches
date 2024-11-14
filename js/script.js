@@ -215,7 +215,7 @@ function cancelarPedido() {
 
 // Função para calcular a taxa de entrega com base no bairro e atualizar o total no modal
 function calcularTaxaEntrega() {
-  const bairro = document.getElementById("bairro").value.trim().toLowerCase();
+  const bairro = document.getElementById("bairro").value;
   const taxaEntregaTexto = document.getElementById("taxa-entrega");
   const botaoConfirmar = document.querySelector('.confirmar'); // Botão "Tudo certo, pode pedir!"
 

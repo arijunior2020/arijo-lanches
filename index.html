@@ -167,8 +167,16 @@
             </div>
 
             <div class="form-endereco">
-                <label for="bairro">Digite seu Bairro:</label>
-                <input type="text" id="bairro" placeholder="Ex: Araturi, Arianopolis, Jurema ou Metropole">
+                <label for="bairro">Selecione seu Bairro:</label>
+                <select id="bairro" onchange="calcularTaxaEntrega()">
+                    <option value="" disabled selected>Selecione um bairro</option>
+                    <option value="araturi">Araturi</option>
+                    <option value="arianopolis">Arianopolis</option>
+                    <option value="jurema">Jurema</option>
+                    <option value="metropole">Metropole</option>
+                    <option value="potira">Potira</option>
+                    <!-- Adicione mais opções de bairros aqui, conforme necessário -->
+                </select>
                 <p id="taxa-entrega"></p> <!-- Mostra a taxa de entrega com base no bairro -->
             </div>
 
