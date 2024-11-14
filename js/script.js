@@ -10,6 +10,25 @@ let quantidadeMassas = 0;
 
 const botaoFinalizar = document.querySelector('.finalizar-pedido');
 
+// Função para salvar o pedido no localStorage
+function salvarPedidoNoLocalStorage() {
+  localStorage.setItem('pedido', JSON.stringify(pedido));
+}
+
+// Função para carregar o pedido do localStorage
+function carregarPedidoDoLocalStorage() {
+  const pedidoSalvo = localStorage.getItem('pedido');
+  if (pedidoSalvo) {
+    pedido = JSON.parse(pedidoSalvo);
+    atualizarResumoPedido();
+    atualizarVisibilidadeBotao();
+    restaurarSelecaoVisual();
+  }
+}
+
+
+
+
 // Variável global para armazenar as escolhas da massa
 let escolhaMassa = {
   tipo: null,
@@ -91,6 +110,7 @@ function adicionarItem(nome, preco, elemento) {
 
   atualizarResumoPedido();
   atualizarVisibilidadeBotao();
+  salvarPedidoNoLocalStorage();
 }
 
 // Função para alterar a quantidade do item (exceto massas)
@@ -112,6 +132,7 @@ function alterarQuantidade(event, nome, valor, button) {
 
   atualizarResumoPedido();
   atualizarVisibilidadeBotao();
+  salvarPedidoNoLocalStorage();
 }
 
 // Função para controlar a visibilidade do botão "Finalizar Pedido"
@@ -151,7 +172,24 @@ function atualizarResumoPedido() {
   });
 }
 
+// Função para restaurar a seleção visual dos itens no pedido
+function restaurarSelecaoVisual() {
+  pedido.forEach(item => {
+    const elemento = Array.from(document.querySelectorAll('.item')).find(el => el.querySelector('h3').innerText === item.nome);
+    if (elemento) {
+      elemento.classList.add('selecionado');
 
+      let controles = document.createElement("div");
+      controles.className = "quantidade-controle";
+      controles.innerHTML = `
+        <button onclick="alterarQuantidade(event, '${item.nome}', -1, this)">-</button>
+        <span class="quantidade">${item.quantidade}</span>
+        <button onclick="alterarQuantidade(event, '${item.nome}', 1, this)">+</button>
+      `;
+      elemento.appendChild(controles);
+    }
+  });
+}
 
 function removerMassa(index) {
   // Remove o item do pedido com base no índice fornecido
@@ -345,6 +383,7 @@ function enviarPedido() {
   atualizarResumoPedido();
   atualizarVisibilidadeBotao();
   cancelarPedido();
+  localStorage.removeItem('pedido'); // Remove o pedido do localStorage
 
   document.querySelectorAll('.menu-items .item').forEach(item => item.classList.remove('selecionado'));
 
@@ -660,8 +699,15 @@ async function carregarItensDisponiveis() {
   }
 }
 
+// Função para inicializar a aplicação
+function iniciarAplicacao() {
+  carregarPedidoDoLocalStorage(); // Carrega o pedido salvo
+  atualizarVisibilidadeBotao();
+  carregarItensDisponiveis(); // Carrega os itens disponíveis com base no dia da semana
+}
+
 // Chamar a função ao carregar a página
-window.onload = carregarItensDisponiveis;
+window.onload = iniciarAplicacao;
 
 
 // Inicializa a visibilidade do botão "Finalizar Pedido"
