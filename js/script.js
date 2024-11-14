@@ -666,9 +666,5 @@ async function carregarItensDisponiveis() {
 window.onload = carregarItensDisponiveis;
 
 
-// Chamar a função ao carregar a página
-window.onload = carregarItensDisponiveis;
-
-
 // Inicializa a visibilidade do botão "Finalizar Pedido"
 atualizarVisibilidadeBotao();
