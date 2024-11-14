@@ -169,7 +169,6 @@ function exibirErroEstilizado(mensagem) {
   }, 3000);
 }
 
-// Função para enviar o pedido via WhatsApp
 function enviarPedido() {
   const nome = document.getElementById("nome").value.trim();
   const bairro = document.getElementById("bairro").value.trim();
@@ -177,17 +176,32 @@ function enviarPedido() {
   const observacao = document.getElementById("observacao").value.trim();
 
   if (!nome || !bairro || !endereco) {
-    exibirErroEstilizado("Por favor, preencha o nome, bairro e endereço antes de prosseguir!");
-    return;
+      exibirErroEstilizado("Por favor, preencha o nome, bairro e endereço antes de prosseguir!");
+      return;
   }
 
   let mensagemPedido = `*Olá, sou ${nome} e gostaria de fazer o pedido:*\n\n`;
   let total = 0;
 
   pedido.forEach(item => {
-    const totalItem = item.preco * item.quantidade;
-    total += totalItem;
-    mensagemPedido += `- *${item.nome}:* ${item.quantidade} x R$ ${item.preco.toFixed(2)} = R$ ${totalItem.toFixed(2)}\n`;
+      const totalItem = item.preco * item.quantidade;
+      total += totalItem;
+      
+      // Inclui os detalhes da massa e o nome do destinatário
+      if (item.nome.startsWith("Massa")) {
+          mensagemPedido += `- *${item.nome} :*\n`; // Corrige o acesso ao destinatário
+          mensagemPedido += `  - Tipo: ${item.tipo}\n`;
+          mensagemPedido += `  - Molhos: ${item.molhos.join(", ")}\n`;
+          if (item.ingredientes.length > 0) {
+              mensagemPedido += `  - Ingredientes: ${item.ingredientes.join(", ")}\n`;
+          }
+          if (item.acompanhamentos.length > 0) {
+              mensagemPedido += `  - Acompanhamentos: ${item.acompanhamentos.join(", ")}\n`;
+          }
+          mensagemPedido += `  - Preço: R$ ${totalItem.toFixed(2)}\n`;
+      } else {
+          mensagemPedido += `- *${item.nome}:* ${item.quantidade} x R$ ${item.preco.toFixed(2)} = R$ ${totalItem.toFixed(2)}\n`;
+      }
   });
 
   total += taxaEntrega;
@@ -218,9 +232,11 @@ function enviarPedido() {
 
   // Define um tempo para recarregar a página após mostrar a confirmação
   setTimeout(() => {
-    location.reload(); // Recarrega a página
+      location.reload(); // Recarrega a página
   }, 5000); // Aguarda 5 segundos antes de recarregar
 }
+
+
 
 // Função para exibir a confirmação e recarregar a página
 function exibirConfirmacao(mensagem) {
@@ -286,12 +302,17 @@ document.querySelectorAll('input[name="ingrediente"]').forEach(checkbox => {
   checkbox.addEventListener('change', verificarLimiteIngredientes);
 });
 
-// Função para confirmar a escolha de cada massa
 function confirmarEscolhaMassa() {
+  const nomeCliente = document.getElementById("nome-massa").value.trim(); // Captura o nome para a massa
   const massaEscolhida = document.querySelector('input[name="massa"]:checked');
   const molhosEscolhidos = document.querySelectorAll('input[name="molho"]:checked');
   const ingredientesSelecionados = document.querySelectorAll('input[name="ingrediente"]:checked');
   const acompanhamentosSelecionados = document.querySelectorAll('input[name="acompanhamento"]:checked');
+
+  if (!nomeCliente) {
+    exibirErroEstilizado("Por favor, insira o nome para esta massa.");
+    return;
+  }
 
   if (!massaEscolhida || molhosEscolhidos.length === 0) {
     exibirErroEstilizado("Por favor, escolha uma massa e ao menos um molho!");
@@ -299,7 +320,8 @@ function confirmarEscolhaMassa() {
   }
 
   const detalhesMassa = {
-    nome: `Massa ${massaAtual}`,
+    nome: `Massa para ${nomeCliente}`, // Inclui o nome para identificação
+    destinatario: nomeCliente, // Armazena o destinatário
     preco: 16.00,
     quantidade: 1,
     tipo: massaEscolhida.value,
@@ -312,6 +334,7 @@ function confirmarEscolhaMassa() {
 
   if (massaAtual < quantidadeMassas) {
     massaAtual++;
+    limparFormularioMassa(); // Limpa o formulário antes de abrir o modal para a próxima massa
     fecharModalMassa();
     setTimeout(abrirModalMassa, 500);
   } else {
@@ -320,7 +343,20 @@ function confirmarEscolhaMassa() {
     atualizarResumoPedido();
     fecharModalMassa();
   }
+
+  atualizarVisibilidadeBotao(); // Garante que o botão "Finalizar Pedido" apareça
 }
+
+// Função para limpar o formulário de seleção da massa
+function limparFormularioMassa() {
+  document.getElementById("nome-massa").value = ""; // Limpa o campo de nome
+  document.querySelectorAll('input[name="massa"]').forEach(radio => radio.checked = false); // Desmarca os radio buttons de massa
+  document.querySelectorAll('input[name="molho"]').forEach(checkbox => checkbox.checked = false); // Desmarca os checkboxes de molho
+  document.querySelectorAll('input[name="acompanhamento"]').forEach(checkbox => checkbox.checked = false); // Desmarca os checkboxes de acompanhamento
+  document.querySelectorAll('input[name="ingrediente"]').forEach(checkbox => checkbox.checked = false); // Desmarca os checkboxes de ingrediente
+}
+
+
 
 // Função para cancelar a escolha de massas
 function cancelarEscolhaMassa() {
