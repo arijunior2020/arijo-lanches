@@ -614,5 +614,10 @@ header {
     opacity: 0.6; /* Torna o botão mais transparente */
 }
 
----------------------------------------------
+.modal-confirmacao .modal-conteudo {
+    max-height: 80vh; /* Limita a altura do modal a 80% da altura da tela */
+    overflow-y: auto; /* Habilita a rolagem vertical quando o conteúdo excede a altura máxima */
+    padding-right: 15px; /* Adiciona um pouco de espaço à direita para evitar o sobreposição com a barra de rolagem */
+}
+
 
