@@ -146,3 +146,19 @@ h1 {
         font-size: 14px;
     }
 }
+
+/* CSS para ajustar o mapa */
+.map-section {
+    text-align: center;
+    padding: 20px;
+}
+
+.map-section iframe {
+    margin-top: 10px;
+    width: 100%;
+    max-width: 600px; /* Limita a largura máxima */
+    height: 450px;
+    border: 0;
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para um efeito visual */
+}
