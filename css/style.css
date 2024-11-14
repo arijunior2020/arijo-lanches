@@ -1,3 +1,8 @@
+main {
+    padding-bottom: 60px; /* Adicione um espaço igual ou maior que a altura do botão */
+}
+
+
 /* Classe para o efeito de item selecionado */
 .selecionado {
     border: 2px solid #C83A31; /* Borda vermelha para indicar seleção */
