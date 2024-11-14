@@ -102,13 +102,15 @@
             <section class="secao">
                 <h2>Massas</h2>
                 <div class="menu-items">
-                    <div class="item massa" onclick="abrirModalMassa()">
+                    <div class="item massa" onclick="adicionarItem('Massa', 16.00, this)">
                         <img src="img/massas.webp" alt="Massas">
                         <h3>Massa</h3>
                         <p>Molho à escolha</p>
                         <span class="preco">R$ 16,00</span>
                     </div>
                 </div>
+                 <!-- Botão Remover Massa -->
+                <button id="botao-remover-massa" class="remover" style="display: none;" onclick="removerMassaSelecionada()">Remover Massa</button>
             </section>
 
             <!-- Seção de Bebidas -->
@@ -165,8 +167,16 @@
             </div>
 
             <div class="form-endereco">
-                <label for="bairro">Digite seu Bairro:</label>
-                <input type="text" id="bairro" placeholder="Ex: Araturi, Arianopolis, Jurema ou Metropole">
+                <label for="bairro">Selecione seu Bairro:</label>
+                <select id="bairro" onchange="calcularTaxaEntrega()">
+                    <option value="" disabled selected>Selecione um bairro</option>
+                    <option value="araturi">Araturi</option>
+                    <option value="arianopolis">Arianopolis</option>
+                    <option value="jurema">Jurema</option>
+                    <option value="metropole">Metropole</option>
+                    <option value="potira">Potira</option>
+                    <!-- Adicione mais opções de bairros aqui, conforme necessário -->
+                </select>
                 <p id="taxa-entrega"></p> <!-- Mostra a taxa de entrega com base no bairro -->
             </div>
 
@@ -189,11 +199,36 @@
         </div>
     </div>
 
-    <!-- Modal de opções de Massas -->
-    <div class="modal-massa">
+    <!-- Modal para selecionar a quantidade de massas -->
+    <div class="modal-quantidade">
         <div class="modal-conteudo">
-            <h2>Escolha seu Pedido:</h2>
+            <h2 class="modal-titulo">Quantidade</h2>
+            <input type="number" id="quantidade-massa" min="1" placeholder="Digite a quantidade desejada"
+                class="input-quantidade">
+            <div class="botoes">
+                <button class="confirmar" onclick="confirmarQuantidade()">
+                    <span class="icon">&#10004;</span> Confirmar
+                </button>
+                <button class="cancelar" onclick="fecharModalQuantidade()">
+                    <span class="icon">&#10006;</span> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal de opções de Massas -->
+    <div class="modal-massa" style="display: none;">
+        <div class="modal-conteudo">
+            <h2>Escolha os detalhes da Massa <span id="massa-atual-numero"></span> de <span
+                    id="total-massas-numero"></span></h2>
             <p><strong>Massas (R$ 16,00)</strong></p>
+
+            <!-- Campo para o nome do destinatário da massa -->
+            <div class="form-destinatario">
+                <label for="destinatario">Nome:</label>
+                <input type="text" id="nome-massa" class="input-estilo" placeholder="Para quem é essa massa?">
+            </div>
 
             <div class="form-massa">
                 <h3>Escolha a Massa:</h3>
@@ -230,11 +265,15 @@
                 <!-- Adicione os outros ingredientes aqui -->
             </div>
 
-            <button class="confirmar" onclick="confirmarEscolhaMassa()">OK</button>
-            <button class="cancelar" onclick="fecharModalMassa()">Cancelar</button>
+            <!-- Botões OK e Cancelar para o modal de massas -->
+            <button class="confirmar" onclick="confirmarEscolhaMassa()">
+                <span class="icon">&#10004;</span> OK
+            </button>
+            <button class="cancelar" onclick="fecharModalMassa()">
+                <span class="icon">&#10006;</span> Cancelar
+            </button>
         </div>
     </div>
-
     <script src="js/script.js"></script>
 </body>
 

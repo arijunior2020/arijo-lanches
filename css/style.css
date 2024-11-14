@@ -254,6 +254,18 @@ header {
     color: white;
 }
 
+.quantidade-controle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+  }
+  
+  .quantidade-controle button {
+    padding: 5px;
+    font-size: 1rem;
+  }
+
 .cancelar {
     background-color: #b5b5b5;
     color: white;
@@ -307,6 +319,170 @@ header {
     font-size: 16px;
     z-index: 1001; /* Coloca a mensagem acima do modal */
     animation: fadeInOut 3s;
+}
+
+.modal-quantidade {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 15px 20px;
+    border-radius: 8px;
+    width: 80vw;
+    max-width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    text-align: center;
+}
+
+.modal-quantidade .modal-titulo {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.input-quantidade {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease;
+}
+
+.input-quantidade:focus {
+    border-color: #C83A31;
+    outline: none;
+}
+
+.modal-quantidade .botoes {
+    display: flex;
+    gap: 10px;
+}
+
+.modal-quantidade .confirmar,
+.modal-quantidade .cancelar {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+}
+
+.modal-quantidade .confirmar {
+    background-color: #32B72F;
+    color: #fff;
+}
+
+.modal-quantidade .cancelar {
+    background-color: #b5b5b5;
+    color: #fff;
+}
+
+.input-estilo {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease;
+}
+
+.input-estilo:focus {
+    border-color: #C83A31;
+    outline: none;
+}
+
+.modal-massa {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 1000;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.modal-background {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.item-resumo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+
+#botao-remover-massa {
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #ff4444;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 150px;
+    display: none; /* Inicia oculto */
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#botao-remover-massa:hover {
+    background-color: #cc0000;
+}
+
+/* Estilização do campo de seleção (select) */
+.form-endereco select {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    background-color: #ffffff; /* Fundo branco */
+    color: #333; /* Cor do texto */
+    appearance: none; /* Remove o estilo padrão do navegador */
+    -webkit-appearance: none; /* Compatibilidade com Safari */
+    -moz-appearance: none; /* Compatibilidade com Firefox */
+}
+
+/* Adiciona uma seta personalizada ao select */
+.form-endereco select {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%23333"><polygon points="7,10 12,15 17,10"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+}
+
+/* Estilo para quando o select estiver focado */
+.form-endereco select:focus {
+    outline: none;
+    border-color: #C83A31; /* Cor de destaque ao focar */
+    box-shadow: 0 0 5px rgba(200, 58, 49, 0.5); /* Sombra suave */
 }
 
 /* Animação de entrada e saída */
@@ -364,6 +540,8 @@ header {
     display: none; /* Começa escondido */
     z-index: 1001;
     color: white;
+    overflow-y: auto; /* Permite rolagem se o conteúdo for muito grande */
+    max-height: 80vh; /* Limita a altura do modal para evitar que ultrapasse a tela */
 }
 
 .modal-massa .modal-conteudo {
@@ -390,6 +568,7 @@ header {
     border-radius: 8px;
     cursor: pointer;
     width: 100%;
+    box-sizing: border-box;
 }
 
 .modal-massa .confirmar {
