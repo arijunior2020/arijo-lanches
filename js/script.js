@@ -142,14 +142,12 @@ function atualizarResumoPedido() {
               <p>${item.nome} - R$ ${totalItem.toFixed(2)}</p>
               <button class="remover" onclick="removerMassa(${index})">Remover</button>
           `;
-          console.log("Botão Remover criado para:", item.nome); // Verifique se o log aparece no console
       } else {
           itemResumo.innerHTML = `<p>${item.nome} - ${item.quantidade} x R$ ${item.preco.toFixed(2)} = R$ ${totalItem.toFixed(2)}</p>`;
       }
 
       // Adiciona o item ao resumo do pedido
       resumoPedido.appendChild(itemResumo);
-      console.log(resumoPedido.innerHTML); // Verifique se o conteúdo está sendo adicionado ao resumo
   });
 }
 
