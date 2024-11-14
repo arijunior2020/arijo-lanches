@@ -5,6 +5,8 @@ const tipoChavePix = "CPF";
 const banco = "Santander";
 const titular = "JOSE ARIMATEIA RODRIGUES JUNIOR";
 let taxaEntrega = 0;
+let massaAtual = 1;
+let quantidadeMassas = 0;
 
 const botaoFinalizar = document.querySelector('.finalizar-pedido');
 
@@ -17,22 +19,68 @@ let escolhaMassa = {
 
 let escolhaAcompanhamento = []; // Variável para armazenar os acompanhamentos escolhidos
 
-// Função para adicionar ou remover itens do pedido
+// Função para adicionar ou remover itens do pedido, excluindo massas
 function adicionarItem(nome, preco, elemento) {
-  if (elemento.classList.contains('selecionado')) {
-    elemento.classList.remove('selecionado');
-    pedido = pedido.filter(item => item.nome !== nome);
-  } else {
-    elemento.classList.add('selecionado');
-    pedido.push({ nome, preco });
+  if (nome === "Massa") {
+    iniciarEscolhaMassa(elemento);
+    return; // Interrompe o fluxo aqui para massas
   }
+
+  // Verifica se o item já foi selecionado
+  let itemPedido = pedido.find(item => item.nome === nome);
+
+  if (itemPedido) {
+    return;
+  } else {
+    pedido.push({ nome, preco, quantidade: 1 });
+    elemento.classList.add('selecionado');
+
+    // Adiciona os controles de quantidade
+    let controles = document.createElement("div");
+    controles.className = "quantidade-controle";
+    controles.innerHTML = `
+      <button onclick="alterarQuantidade(event, '${nome}', -1, this)">-</button>
+      <span class="quantidade">1</span>
+      <button onclick="alterarQuantidade(event, '${nome}', 1, this)">+</button>
+    `;
+    elemento.appendChild(controles);
+  }
+
   atualizarResumoPedido();
   atualizarVisibilidadeBotao();
 }
 
+// Função para alterar a quantidade do item (exceto massas)
+function alterarQuantidade(event, nome, valor, button) {
+  event.stopPropagation();
+
+  let itemPedido = pedido.find(item => item.nome === nome);
+  if (!itemPedido) return;
+
+  itemPedido.quantidade += valor;
+
+  if (itemPedido.quantidade <= 0) {
+    pedido = pedido.filter(item => item.nome !== nome);
+    button.closest('.item').classList.remove('selecionado');
+    button.closest('.quantidade-controle').remove();
+  } else {
+    button.closest('.quantidade-controle').querySelector('.quantidade').innerText = itemPedido.quantidade;
+  }
+
+  atualizarResumoPedido();
+  atualizarVisibilidadeBotao();
+}
+
+// Função para controlar a visibilidade do botão "Finalizar Pedido"
+function atualizarVisibilidadeBotao() {
+  botaoFinalizar.style.display = pedido.length > 0 ? 'block' : 'none';
+}
+
 // Função para atualizar o resumo do pedido no botão "Finalizar Pedido"
 function atualizarResumoPedido() {
-  botaoFinalizar.innerText = `Finalizar Pedido - ${pedido.length} itens`;
+  const totalItens = pedido.reduce((acc, item) => acc + item.quantidade, 0);
+  const totalPreco = pedido.reduce((acc, item) => acc + item.preco * item.quantidade, 0);
+  botaoFinalizar.innerText = `Finalizar Pedido - ${totalItens} itens - Total: R$ ${totalPreco.toFixed(2)}`;
 }
 
 // Função para controlar a visibilidade do botão "Finalizar Pedido"
@@ -51,8 +99,9 @@ function confirmarPedido() {
   let total = 0;
 
   pedido.forEach(item => {
-    total += item.preco;
-    resumoPedido.innerHTML += `<p>${item.nome} - R$ ${item.preco.toFixed(2)}</p>`;
+    const totalItem = item.preco * item.quantidade;
+    total += totalItem;
+    resumoPedido.innerHTML += `<p>${item.nome} - ${item.quantidade} x R$ ${item.preco.toFixed(2)} = R$ ${totalItem.toFixed(2)}</p>`;
   });
   resumoPedido.innerHTML += `<p><strong>Total: R$ ${total.toFixed(2)}</strong></p>`;
 
@@ -61,6 +110,7 @@ function confirmarPedido() {
   background.style.display = 'block';
   container.classList.add('blur'); // Adiciona o efeito de desfoque ao conteúdo principal
 }
+
 
 // Função para fechar o modal de confirmação do pedido
 function cancelarPedido() {
@@ -72,60 +122,47 @@ function cancelarPedido() {
 }
 
 // Função para calcular a taxa de entrega com base no bairro e atualizar o total no modal
-function calcularTaxaEntrega(event) {
-  event.preventDefault(); // Previne o comportamento padrão de envio
-
+function calcularTaxaEntrega() {
   const bairro = document.getElementById("bairro").value.trim().toLowerCase();
   const taxaEntregaTexto = document.getElementById("taxa-entrega");
   const botaoConfirmar = document.querySelector('.confirmar'); // Botão "Tudo certo, pode pedir!"
-  let total = pedido.reduce((acc, item) => acc + item.preco, 0); // Calcula o total inicial
 
-// Verifica se o bairro é atendido
-if (bairro === "araturi") {
-  taxaEntrega = 2.00;
-  taxaEntregaTexto.innerText = "Taxa de entrega: R$ 2,00";
-  taxaEntregaTexto.style.color = "#7DDA58";
-  botaoConfirmar.disabled = false; // Habilita o botão de confirmação do pedido
-} else if (bairro === "arianopolis") {
-  taxaEntrega = 4.00;
-  taxaEntregaTexto.innerText = "Taxa de entrega: R$ 4,00";
-  taxaEntregaTexto.style.color = "#7DDA58";
-  botaoConfirmar.disabled = false; // Habilita o botão de confirmação do pedido
-} else if (bairro === "jurema" || bairro === "metropole") {
-  taxaEntrega = 5.00;
-  taxaEntregaTexto.innerText = "Taxa de entrega: R$ 5,00";
-  taxaEntregaTexto.style.color = "#7DDA58";
-  botaoConfirmar.disabled = false; // Habilita o botão de confirmação do pedido
-} else if (bairro === "potira") {
-  taxaEntrega = 6.00;
-  taxaEntregaTexto.innerText = "Taxa de entrega: R$ 6,00";
-  taxaEntregaTexto.style.color = "#FFDE59";
-  botaoConfirmar.disabled = false; // Habilita o botão de confirmação do pedido
-} else {
-  // Caso o bairro não seja atendido
+  // Reseta taxa e estado do botão
+  botaoConfirmar.disabled = true;
   taxaEntrega = 0;
-  taxaEntregaTexto.innerText = "Bairro não atendido";
-  taxaEntregaTexto.style.color = "#FF0000"; // Cor vermelha para indicar erro
-  botaoConfirmar.disabled = true; // Desabilita o botão de confirmação do pedido
-  
-  // Exibe o alerta estilizado informando que o bairro não é atendido
-  exibirErroEstilizado("Bairro fora da área de entrega. Por favor, escolha um bairro válido.");
-  return; // Não prossegue com o cálculo se o bairro estiver fora da área de entrega
+  let total = pedido.reduce((acc, item) => acc + item.preco * item.quantidade, 0); // Calcula o total inicial
+
+  // Definindo as taxas de entrega com base nos bairros
+  const taxas = {
+    araturi: 2.00,
+    arianopolis: 4.00,
+    jurema: 5.00,
+    metropole: 5.00,
+    potira: 6.00
+  };
+
+  if (taxas.hasOwnProperty(bairro)) {
+    taxaEntrega = taxas[bairro];
+    taxaEntregaTexto.style.color = "#7DDA58"; // Verde para indicar bairro atendido
+    taxaEntregaTexto.innerText = `Taxa de entrega: R$ ${taxaEntrega.toFixed(2)}`;
+    botaoConfirmar.disabled = false; // Habilita o botão de confirmação
+  } else {
+    taxaEntregaTexto.style.color = "#FF0000"; // Vermelho para indicar bairro não atendido
+    taxaEntregaTexto.innerText = "Bairro não atendido";
+  }
+
+  // Atualiza o total no modal
+  total += taxaEntrega;
+  const resumoPedido = document.querySelector('.resumo-pedido');
+  resumoPedido.innerHTML = ''; // Limpa o conteúdo anterior
+  pedido.forEach(item => {
+    const totalItem = item.preco * item.quantidade;
+    resumoPedido.innerHTML += `<p>${item.nome} - ${item.quantidade} x R$ ${item.preco.toFixed(2)} = R$ ${totalItem.toFixed(2)}</p>`;
+  });
+  resumoPedido.innerHTML += `<p>Taxa de entrega: R$ ${taxaEntrega.toFixed(2)}</p>`;
+  resumoPedido.innerHTML += `<p><strong>Total com entrega: R$ ${total.toFixed(2)}</strong></p>`;
 }
 
-// Adiciona a taxa de entrega ao total se o bairro for atendido
-total += taxaEntrega; 
-
-
-// Atualiza o total no modal
-const resumoPedido = document.querySelector('.resumo-pedido');
-resumoPedido.innerHTML = '';
-pedido.forEach(item => {
-  resumoPedido.innerHTML += `<p>${item.nome} - R$ ${item.preco.toFixed(2)}</p>`;
-});
-resumoPedido.innerHTML += `<p>Taxa de entrega: R$ ${taxaEntrega.toFixed(2)}</p>`;
-resumoPedido.innerHTML += `<p><strong>Total com entrega: R$ ${total.toFixed(2)}</strong></p>`;
-}
 
 // Função para exibir mensagem de erro estilizada
 function exibirErroEstilizado(mensagem) {
@@ -146,30 +183,19 @@ function enviarPedido() {
   const endereco = document.getElementById("endereco").value.trim();
   const observacao = document.getElementById("observacao").value.trim();
 
-  // Verifica se os campos de nome, bairro e endereço estão preenchidos
   if (!nome || !bairro || !endereco) {
     exibirErroEstilizado("Por favor, preencha o nome, bairro e endereço antes de prosseguir!");
-    return; // Sai da função para impedir o envio do pedido incompleto
+    return;
   }
 
   let mensagemPedido = `*Olá, sou ${nome} e gostaria de fazer o pedido:*\n\n`;
-  let total = pedido.reduce((acc, item) => acc + item.preco, 0);
+  let total = 0;
 
-  // Adiciona os itens do pedido à mensagem
   pedido.forEach(item => {
-    mensagemPedido += `- *${item.nome}:* R$ ${item.preco.toFixed(2)}\n`;
+    const totalItem = item.preco * item.quantidade;
+    total += totalItem;
+    mensagemPedido += `- *${item.nome}:* ${item.quantidade} x R$ ${item.preco.toFixed(2)} = R$ ${totalItem.toFixed(2)}\n`;
   });
-
-  // Verifica se o item "Massas" está no pedido antes de adicionar as escolhas de massas
-  const massaNoPedido = pedido.find(item => item.nome === "Massas");
-  if (massaNoPedido && escolhaMassa.tipo && escolhaMassa.molho.length > 0) {
-    mensagemPedido += `\n*Opções de Massas:*\n`;
-    mensagemPedido += `- Massa: ${escolhaMassa.tipo}\n`;
-    mensagemPedido += `- Molhos: ${escolhaMassa.molho.join(', ')}\n`; // Envia todos os molhos selecionados
-    if (escolhaMassa.ingredientes.length > 0) {
-      mensagemPedido += `- Ingredientes: ${escolhaMassa.ingredientes.join(', ')}\n`;
-    }
-  }
 
   total += taxaEntrega;
   mensagemPedido += `\n*Taxa de entrega: R$ ${taxaEntrega.toFixed(2)}*`;
@@ -185,65 +211,87 @@ function enviarPedido() {
   mensagemPedido += `- *Titular:* ${titular}\n\n`;
   mensagemPedido += `*Obrigado por escolher Ari Jo Lanches!*`;
 
-  // URL para envio do pedido via WhatsApp
   const urlPedido = `https://api.whatsapp.com/send?phone=5585987764006&text=${encodeURIComponent(mensagemPedido)}`;
   window.open(urlPedido, '_blank');
 
-  // Exibe a confirmação de que o pedido foi enviado com sucesso
-  exibirConfirmacao("Pedido confirmado e enviado para o WhatsApp! Por favor, realize o pagamento via PIX ou em dinheiro na entrega.");
-
-  // Limpa o pedido, fecha o modal e reseta a seleção visual
+  exibirConfirmacao("Pedido confirmado e enviado para o WhatsApp!");
   pedido = [];
-  escolhaMassa = { tipo: null, molho: [], ingredientes: [] }; // Reseta os molhos como array
   atualizarResumoPedido();
   atualizarVisibilidadeBotao();
-  cancelarPedido(); // Fecha o modal de confirmação
+  cancelarPedido();
 
   // Limpa as seleções visuais de todos os itens
   document.querySelectorAll('.menu-items .item').forEach(item => item.classList.remove('selecionado'));
+
+   // Define um tempo para recarregar a página após mostrar a confirmação
+  setTimeout(() => {
+    location.reload(); // Recarrega a página
+  }, 5000); // Aguarda 5 segundos antes de recarregar
 }
 
-
-
-// Função para exibir a confirmação de pedido enviado
+// Função para exibir a confirmação e recarregar a página
 function exibirConfirmacao(mensagem) {
   const confirmacao = document.createElement('div');
   confirmacao.classList.add('confirmacao-mensagem');
   confirmacao.innerText = mensagem;
   document.body.appendChild(confirmacao);
 
-  // Remove a mensagem após 5 segundos
   setTimeout(() => {
     confirmacao.remove();
-  }, 5000);
+    location.reload(); // Recarrega a página para novo pedido
+  }, 5000); // Espera 5 segundos antes de recarregar
 }
 
+// // Função para exibir a confirmação de pedido enviado
+// function exibirConfirmacao(mensagem) {
+//   const confirmacao = document.createElement('div');
+//   confirmacao.classList.add('confirmacao-mensagem');
+//   confirmacao.innerText = mensagem;
+//   document.body.appendChild(confirmacao);
 
-// Função para exibir a confirmação de pedido enviado
-function exibirConfirmacao(mensagem) {
-  const confirmacao = document.createElement('div');
-  confirmacao.classList.add('confirmacao-mensagem');
-  confirmacao.innerText = mensagem;
-  document.body.appendChild(confirmacao);
+//   // Remove a mensagem após 5 segundos
+//   setTimeout(() => {
+//     confirmacao.remove();
+//   }, 5000);
+// }
 
-  // Remove a mensagem após 3 segundos
-  setTimeout(() => {
-    confirmacao.remove();
-  }, 3000);
+// Função para iniciar a escolha de quantidade e detalhes de massas
+function iniciarEscolhaMassa(elemento) {
+  quantidadeMassas = parseInt(prompt("Quantas massas você deseja?"), 10);
+
+  if (isNaN(quantidadeMassas) || quantidadeMassas <= 0) {
+    alert("Por favor, insira uma quantidade válida.");
+    return;
+  }
+
+  elemento.classList.add('selecionado');
+  abrirModalMassa(); // Abre o modal para a primeira massa
 }
 
-
-
-// Funções para abrir e fechar o modal de massas
+// Função para abrir o modal para escolher detalhes da massa
 function abrirModalMassa() {
   document.querySelector('.modal-massa').style.display = 'block';
   document.querySelector('.modal-background').style.display = 'block';
+  document.querySelector('.modal-massa h2').innerText = `Escolha os detalhes da Massa ${massaAtual} de ${quantidadeMassas}`;
 }
 
+// // Funções para abrir e fechar o modal de massas
+// function abrirModalMassa() {
+//   document.querySelector('.modal-massa').style.display = 'block';
+//   document.querySelector('.modal-background').style.display = 'block';
+// }
+
+// Função para fechar o modal
 function fecharModalMassa() {
   document.querySelector('.modal-massa').style.display = 'none';
   document.querySelector('.modal-background').style.display = 'none';
 }
+
+// function fecharModalMassa() {
+//   document.querySelector('.modal-massa').style.display = 'none';
+//   document.querySelector('.modal-background').style.display = 'none';
+// }
+
 
 // Função para verificar a quantidade de ingredientes selecionados
 function verificarLimiteIngredientes() {
@@ -270,24 +318,58 @@ document.querySelectorAll('input[name="ingrediente"]').forEach(checkbox => {
   checkbox.addEventListener('change', verificarLimiteIngredientes);
 });
 
-
-
-// Função para confirmar a escolha de massas e fechar o modal
+// Função para confirmar a escolha de cada massa
 function confirmarEscolhaMassa() {
   const massaEscolhida = document.querySelector('input[name="massa"]:checked');
   const molhosEscolhidos = document.querySelectorAll('input[name="molho"]:checked');
   const ingredientesSelecionados = document.querySelectorAll('input[name="ingrediente"]:checked');
   const acompanhamentosSelecionados = document.querySelectorAll('input[name="acompanhamento"]:checked');
 
-  // Verifica se todas as opções estão desmarcadas
-  if (!massaEscolhida && molhosEscolhidos.length === 0 && ingredientesSelecionados.length === 0 && acompanhamentosSelecionados.length === 0) {
-    // Se nada está selecionado, remove "Massas" do pedido e desmarca visualmente
-    pedido = pedido.filter(item => item.nome !== "Massas");
-    document.querySelector('.menu-items .item.massa').classList.remove('selecionado');
-    atualizarResumoPedido();
-    fecharModalMassa();
+  if (!massaEscolhida || molhosEscolhidos.length === 0) {
+    exibirErroEstilizado("Por favor, escolha uma massa e ao menos um molho!");
     return;
   }
+
+  const detalhesMassa = {
+    nome: `Massa ${massaAtual}`,
+    preco: 16.00,
+    quantidade: 1,
+    tipo: massaEscolhida.value,
+    molhos: Array.from(molhosEscolhidos).map(molho => molho.value),
+    ingredientes: Array.from(ingredientesSelecionados).map(ing => ing.value),
+    acompanhamentos: Array.from(acompanhamentosSelecionados).map(acomp => acomp.value)
+  };
+
+  pedido.push(detalhesMassa);
+
+  if (massaAtual < quantidadeMassas) {
+    massaAtual++;
+    fecharModalMassa();
+    setTimeout(abrirModalMassa, 500);
+  } else {
+    massaAtual = 1;
+    quantidadeMassas = 0;
+    atualizarResumoPedido();
+    fecharModalMassa();
+  }
+}
+
+// // Função para confirmar a escolha de massas e fechar o modal
+// function confirmarEscolhaMassa() {
+//   const massaEscolhida = document.querySelector('input[name="massa"]:checked');
+//   const molhosEscolhidos = document.querySelectorAll('input[name="molho"]:checked');
+//   const ingredientesSelecionados = document.querySelectorAll('input[name="ingrediente"]:checked');
+//   const acompanhamentosSelecionados = document.querySelectorAll('input[name="acompanhamento"]:checked');
+
+//   // Verifica se todas as opções estão desmarcadas
+//   if (!massaEscolhida && molhosEscolhidos.length === 0 && ingredientesSelecionados.length === 0 && acompanhamentosSelecionados.length === 0) {
+//     // Se nada está selecionado, remove "Massas" do pedido e desmarca visualmente
+//     pedido = pedido.filter(item => item.nome !== "Massas");
+//     document.querySelector('.menu-items .item.massa').classList.remove('selecionado');
+//     atualizarResumoPedido();
+//     fecharModalMassa();
+//     return;
+//   }
 
   // Se há uma seleção de massa e algum molho, processa normalmente
   if (massaEscolhida && molhosEscolhidos.length > 0) {
@@ -313,15 +395,13 @@ function confirmarEscolhaMassa() {
     // Exibe erro se massa ou molho não foi escolhido
     exibirErroEstilizado("Por favor, escolha uma massa e ao menos um molho!");
   }
-}
 
 
 
 // Função para cancelar a escolha de massas
 function cancelarEscolhaMassa() {
   document.querySelector('.menu-items .item.massa').classList.remove('selecionado');
-  pedido = pedido.filter(item => item.nome !== "Massas");
-  escolhaMassa = { tipo: null, molho: null, ingredientes: [] };
+  pedido = pedido.filter(item => item.nome !== "Massa");
   atualizarResumoPedido();
   fecharModalMassa();
 }

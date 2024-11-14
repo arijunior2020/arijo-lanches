@@ -254,6 +254,18 @@ header {
     color: white;
 }
 
+.quantidade-controle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+  }
+  
+  .quantidade-controle button {
+    padding: 5px;
+    font-size: 1rem;
+  }
+
 .cancelar {
     background-color: #b5b5b5;
     color: white;
