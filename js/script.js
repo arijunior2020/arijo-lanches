@@ -83,11 +83,6 @@ function atualizarResumoPedido() {
   botaoFinalizar.innerText = `Finalizar Pedido - ${totalItens} itens - Total: R$ ${totalPreco.toFixed(2)}`;
 }
 
-// Função para controlar a visibilidade do botão "Finalizar Pedido"
-function atualizarVisibilidadeBotao() {
-  botaoFinalizar.style.display = pedido.length > 0 ? 'block' : 'none';
-}
-
 // Função para mostrar o modal de confirmação do pedido
 function confirmarPedido() {
   const modal = document.querySelector('.modal-confirmacao');
@@ -110,7 +105,6 @@ function confirmarPedido() {
   background.style.display = 'block';
   container.classList.add('blur'); // Adiciona o efeito de desfoque ao conteúdo principal
 }
-
 
 // Função para fechar o modal de confirmação do pedido
 function cancelarPedido() {
@@ -162,7 +156,6 @@ function calcularTaxaEntrega() {
   resumoPedido.innerHTML += `<p>Taxa de entrega: R$ ${taxaEntrega.toFixed(2)}</p>`;
   resumoPedido.innerHTML += `<p><strong>Total com entrega: R$ ${total.toFixed(2)}</strong></p>`;
 }
-
 
 // Função para exibir mensagem de erro estilizada
 function exibirErroEstilizado(mensagem) {
@@ -223,7 +216,7 @@ function enviarPedido() {
   // Limpa as seleções visuais de todos os itens
   document.querySelectorAll('.menu-items .item').forEach(item => item.classList.remove('selecionado'));
 
-   // Define um tempo para recarregar a página após mostrar a confirmação
+  // Define um tempo para recarregar a página após mostrar a confirmação
   setTimeout(() => {
     location.reload(); // Recarrega a página
   }, 5000); // Aguarda 5 segundos antes de recarregar
@@ -241,19 +234,6 @@ function exibirConfirmacao(mensagem) {
     location.reload(); // Recarrega a página para novo pedido
   }, 5000); // Espera 5 segundos antes de recarregar
 }
-
-// // Função para exibir a confirmação de pedido enviado
-// function exibirConfirmacao(mensagem) {
-//   const confirmacao = document.createElement('div');
-//   confirmacao.classList.add('confirmacao-mensagem');
-//   confirmacao.innerText = mensagem;
-//   document.body.appendChild(confirmacao);
-
-//   // Remove a mensagem após 5 segundos
-//   setTimeout(() => {
-//     confirmacao.remove();
-//   }, 5000);
-// }
 
 // Função para iniciar a escolha de quantidade e detalhes de massas
 function iniciarEscolhaMassa(elemento) {
@@ -275,23 +255,11 @@ function abrirModalMassa() {
   document.querySelector('.modal-massa h2').innerText = `Escolha os detalhes da Massa ${massaAtual} de ${quantidadeMassas}`;
 }
 
-// // Funções para abrir e fechar o modal de massas
-// function abrirModalMassa() {
-//   document.querySelector('.modal-massa').style.display = 'block';
-//   document.querySelector('.modal-background').style.display = 'block';
-// }
-
-// Função para fechar o modal
+// Função para fechar o modal de massas
 function fecharModalMassa() {
   document.querySelector('.modal-massa').style.display = 'none';
   document.querySelector('.modal-background').style.display = 'none';
 }
-
-// function fecharModalMassa() {
-//   document.querySelector('.modal-massa').style.display = 'none';
-//   document.querySelector('.modal-background').style.display = 'none';
-// }
-
 
 // Função para verificar a quantidade de ingredientes selecionados
 function verificarLimiteIngredientes() {
@@ -353,50 +321,6 @@ function confirmarEscolhaMassa() {
     fecharModalMassa();
   }
 }
-
-// // Função para confirmar a escolha de massas e fechar o modal
-// function confirmarEscolhaMassa() {
-//   const massaEscolhida = document.querySelector('input[name="massa"]:checked');
-//   const molhosEscolhidos = document.querySelectorAll('input[name="molho"]:checked');
-//   const ingredientesSelecionados = document.querySelectorAll('input[name="ingrediente"]:checked');
-//   const acompanhamentosSelecionados = document.querySelectorAll('input[name="acompanhamento"]:checked');
-
-//   // Verifica se todas as opções estão desmarcadas
-//   if (!massaEscolhida && molhosEscolhidos.length === 0 && ingredientesSelecionados.length === 0 && acompanhamentosSelecionados.length === 0) {
-//     // Se nada está selecionado, remove "Massas" do pedido e desmarca visualmente
-//     pedido = pedido.filter(item => item.nome !== "Massas");
-//     document.querySelector('.menu-items .item.massa').classList.remove('selecionado');
-//     atualizarResumoPedido();
-//     fecharModalMassa();
-//     return;
-//   }
-
-  // Se há uma seleção de massa e algum molho, processa normalmente
-  if (massaEscolhida && molhosEscolhidos.length > 0) {
-    // Armazena as escolhas na variável global
-    escolhaMassa.tipo = massaEscolhida.value;
-    escolhaMassa.molho = Array.from(molhosEscolhidos).map(molho => molho.value); // Captura todos os molhos selecionados
-    escolhaMassa.ingredientes = Array.from(ingredientesSelecionados).map(ing => ing.value);
-    escolhaMassa.acompanhamentos = Array.from(acompanhamentosSelecionados).map(acomp => acomp.value);
-
-    // Adiciona o item "Massas" ao pedido se ainda não foi adicionado
-    const massaIndex = pedido.findIndex(item => item.nome === "Massas");
-    if (massaIndex === -1) {
-      pedido.push({ nome: "Massas", preco: 16.00 });
-    }
-
-    // Marca o item "Massas" como selecionado visualmente
-    document.querySelector('.menu-items .item.massa').classList.add('selecionado');
-
-    atualizarResumoPedido();
-    atualizarVisibilidadeBotao();
-    fecharModalMassa();
-  } else {
-    // Exibe erro se massa ou molho não foi escolhido
-    exibirErroEstilizado("Por favor, escolha uma massa e ao menos um molho!");
-  }
-
-
 
 // Função para cancelar a escolha de massas
 function cancelarEscolhaMassa() {
