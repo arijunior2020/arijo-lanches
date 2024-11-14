@@ -537,32 +537,66 @@ function atualizarFormaPagamento() {
   const formaPagamento = document.getElementById("forma-pagamento").value;
   const campoTroco = document.getElementById("campo-troco");
   const trocoInput = document.getElementById("troco");
+  const trocoCalculado = document.getElementById("troco-calculado");
 
-  let total = pedido.reduce((acc, item) => acc + item.preco * item.quantidade, 0);
-
-  // Oculta o campo de troco por padrão
-  campoTroco.style.display = "none";
-  trocoInput.value = "";
-
-  if (formaPagamento === "dinheiro") {
-    // Exibe o campo de troco se o pagamento for em dinheiro
-    campoTroco.style.display = "block";
-  } else if (formaPagamento === "debito" || formaPagamento === "credito") {
-    // Acrescenta R$ 1,00 ao total se o pagamento for em cartão
-    total += 1.00;
+  // Limpa o valor do troco e do troco calculado ao trocar a forma de pagamento
+  if (trocoInput) {
+    trocoInput.value = '';
+  }
+  if (trocoCalculado) {
+    trocoCalculado.textContent = '';
   }
 
-  // Atualiza o total exibido no modal
-  const resumoPedido = document.querySelector('.resumo-pedido');
-  resumoPedido.innerHTML = ''; // Limpa o conteúdo anterior
-  pedido.forEach(item => {
-    const totalItem = item.preco * item.quantidade;
-    resumoPedido.innerHTML += `<p>${item.nome} - ${item.quantidade} x R$ ${item.preco.toFixed(2)} = R$ ${totalItem.toFixed(2)}</p>`;
-  });
+  // Mostra o campo de troco apenas se a forma de pagamento for "dinheiro"
+  if (formaPagamento === "dinheiro") {
+    campoTroco.style.display = "block";
+  } else {
+    campoTroco.style.display = "none";
+  }
 
-  // Adiciona taxa de maquineta ou taxa de entrega no resumo
-  resumoPedido.innerHTML += `<p><strong>Total: R$ ${total.toFixed(2)}</strong></p>`;
+  // Recalcula o total com base nos itens do pedido e nas taxas
+  let total = pedido.reduce((acc, item) => acc + (item.preco * item.quantidade), 0);
+  total += taxaEntrega; // Adiciona a taxa de entrega ao total
+
+  // Adiciona a taxa de maquineta se a forma de pagamento for débito ou crédito
+  const taxaMaquineta = (formaPagamento === "debito" || formaPagamento === "credito") ? 1.00 : 0.00;
+  total += taxaMaquineta;
+
+  // Atualiza o resumo do pedido no modal
+  const resumoPedido = document.querySelector('.resumo-pedido');
+  if (resumoPedido) {
+    resumoPedido.innerHTML = ''; // Limpa o conteúdo anterior
+
+    // Adiciona cada item no pedido ao resumo
+    pedido.forEach(item => {
+      const totalItem = item.preco * item.quantidade;
+      resumoPedido.innerHTML += `<p>${item.nome} - ${item.quantidade} x R$ ${item.preco.toFixed(2)} = R$ ${totalItem.toFixed(2)}</p>`;
+    });
+
+    // Adiciona a taxa de entrega ao resumo
+    resumoPedido.innerHTML += `<p>Taxa de entrega: R$ ${taxaEntrega.toFixed(2)}</p>`;
+
+    // Mostra a taxa de maquineta se aplicável
+    if (taxaMaquineta > 0) {
+      resumoPedido.innerHTML += `<p>Taxa de maquineta: R$ 1.00</p>`;
+    }
+
+    // Atualiza o valor total final com todos os encargos
+    resumoPedido.innerHTML += `<p><strong>Total com entrega: R$ ${total.toFixed(2)}</strong></p>`;
+  }
+
+  // Atualiza o valor total exibido no campo de troco, caso o usuário insira o valor desejado
+  trocoInput.addEventListener("input", () => {
+    const valorTroco = parseFloat(trocoInput.value) || 0;
+    const trocoParaCliente = valorTroco > total ? valorTroco - total : 0;
+    trocoCalculado.textContent = `Troco necessário: R$ ${trocoParaCliente.toFixed(2)}`;
+  });
 }
+
+
+// Chame a função atualizarFormaPagamento sempre que a forma de pagamento mudar
+document.getElementById("forma-pagamento").addEventListener("change", atualizarFormaPagamento);
+
 
 
 // Função para exibir o botão "Remover Massa" logo abaixo do item de massa

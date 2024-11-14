@@ -485,6 +485,12 @@ header {
     box-shadow: 0 0 5px rgba(200, 58, 49, 0.5); /* Sombra suave */
 }
 
+#troco-calculado {
+    color: #7DDA58 !important; /* Verde para combinar com a taxa */
+    font-weight: bold;
+    margin-top: 10px; /* Adiciona uma margem superior para espaçamento */
+}
+
 /* Animação de entrada e saída */
 @keyframes fadeInOut {
     0% { opacity: 0; }
