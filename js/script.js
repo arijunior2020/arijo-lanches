@@ -631,5 +631,44 @@ function toggleMenu() {
   document.querySelector('.dropdown-menu').classList.toggle('show');
 }
 
+async function carregarItensDisponiveis() {
+  try {
+      // Carregar o JSON com os itens disponíveis
+      const response = await fetch('js/diasDisponiveis.json');
+      if (!response.ok) {
+          throw new Error("Erro ao carregar o arquivo JSON");
+      }
+
+      const diasDisponiveis = await response.json();
+
+      // Obter o dia da semana
+      const diasSemana = ["domingo", "segunda", "terca", "quarta", "quinta", "sexta", "sabado"];
+      const diaAtual = diasSemana[new Date().getDay()];
+
+      // Obter os itens do dia atual
+      const itensDisponiveis = diasDisponiveis[diaAtual];
+
+      // Ocultar ou mostrar seções com base nos itens disponíveis
+      document.querySelectorAll('.secao').forEach(secao => {
+          const idSecao = secao.getAttribute('data-secao');
+          if (itensDisponiveis.includes(idSecao)) {
+              secao.style.display = "block";
+          } else {
+              secao.style.display = "none";
+          }
+      });
+  } catch (error) {
+      console.error("Erro ao carregar os itens disponíveis:", error);
+  }
+}
+
+// Chamar a função ao carregar a página
+window.onload = carregarItensDisponiveis;
+
+
+// Chamar a função ao carregar a página
+window.onload = carregarItensDisponiveis;
+
+
 // Inicializa a visibilidade do botão "Finalizar Pedido"
 atualizarVisibilidadeBotao();
