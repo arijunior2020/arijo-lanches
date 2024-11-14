@@ -360,14 +360,18 @@ function fecharModalQuantidade() {
   document.querySelector('.modal-quantidade').style.display = 'none';
   document.querySelector('.modal-background').style.display = 'none';
 
-  // Remove a seleção visual caso o usuário cancele o processo
+  // Remove a seleção visual e oculta o botão "Remover Massa" caso o usuário cancele o processo
   const itemMassa = document.querySelector('.item.massa');
   if (itemMassa) {
     itemMassa.classList.remove('selecionado');
   }
+
+  // Oculta o botão "Remover Massa"
+  const botaoRemover = document.getElementById("botao-remover-massa");
+  botaoRemover.style.display = 'none';
 }
 
-// Confirma a quantidade de massas e abre o modal de detalhes
+// Função para confirmar a quantidade de massas e abrir o modal de detalhes para a primeira massa
 function confirmarQuantidade() {
   const quantidadeInput = document.getElementById('quantidade-massa');
   quantidadeMassas = parseInt(quantidadeInput.value, 10);
@@ -381,11 +385,10 @@ function confirmarQuantidade() {
   abrirModalMassa(); // Abre o modal de detalhes da primeira massa
 }
 
-// Função para iniciar a seleção de massas (abre o modal de quantidade)
+// Função para iniciar a escolha de massa e abrir o modal de quantidade
 function iniciarEscolhaMassa(elemento) {
-  // Só abre o modal de quantidade, sem adicionar ainda o item ao pedido
+  elemento.classList.add('selecionado'); // Adiciona a borda visual
   abrirModalQuantidade();
-  elemento.classList.add('selecionado');
 }
 
 // Abre o modal de detalhes de uma massa específica
