@@ -19,10 +19,53 @@ let escolhaMassa = {
 
 let escolhaAcompanhamento = []; // Variável para armazenar os acompanhamentos escolhidos
 
+// Função para remover a massa do pedido e a borda de seleção
+function removerMassa() {
+  // Remove o item "Massa" do pedido
+  pedido = pedido.filter(item => !item.nome.startsWith("Massa"));
+
+  // Atualiza o resumo e a visibilidade do botão "Finalizar Pedido"
+  atualizarResumoPedido();
+  atualizarVisibilidadeBotao();
+
+  // Remove a borda vermelha do item de massa
+  const itemMassa = document.querySelector('.item.massa');
+  if (itemMassa) {
+    itemMassa.classList.remove('selecionado');
+  }
+
+  // Remove o botão "Remover Massa" após clicar
+  const botaoRemover = document.querySelector('.botao-remover-massa');
+  if (botaoRemover) {
+    botaoRemover.remove();
+  }
+}
+
+// Função para remover a massa do pedido e a borda de seleção
+function removerMassaSelecionada() {
+  // Remove o item "Massa" do pedido
+  pedido = pedido.filter(item => !item.nome.startsWith("Massa"));
+
+  // Atualiza o resumo e a visibilidade do botão "Finalizar Pedido"
+  atualizarResumoPedido();
+  atualizarVisibilidadeBotao();
+
+  // Remove a borda vermelha do item de massa
+  const itemMassa = document.querySelector('.item.massa');
+  if (itemMassa) {
+    itemMassa.classList.remove('selecionado');
+  }
+
+  // Oculta o botão "Remover Massa" após remover
+  const botaoRemover = document.getElementById("botao-remover-massa");
+  botaoRemover.style.display = 'none';
+}
+
 // Função para adicionar ou remover itens do pedido, excluindo massas
 function adicionarItem(nome, preco, elemento) {
   if (nome === "Massa") {
     iniciarEscolhaMassa(elemento);
+    document.getElementById('botao-remover-massa').style.display = 'block'; // Exibe o botão "Remover Massa"
     return; // Interrompe o fluxo aqui para massas
   }
 
@@ -76,12 +119,67 @@ function atualizarVisibilidadeBotao() {
   botaoFinalizar.style.display = pedido.length > 0 ? 'block' : 'none';
 }
 
-// Função para atualizar o resumo do pedido no botão "Finalizar Pedido"
 function atualizarResumoPedido() {
   const totalItens = pedido.reduce((acc, item) => acc + item.quantidade, 0);
   const totalPreco = pedido.reduce((acc, item) => acc + item.preco * item.quantidade, 0);
   botaoFinalizar.innerText = `Finalizar Pedido - ${totalItens} itens - Total: R$ ${totalPreco.toFixed(2)}`;
+
+  // Limpa o conteúdo atual do resumo
+  const resumoPedido = document.querySelector('.resumo-pedido');
+  resumoPedido.innerHTML = '';
+
+  // Itera sobre cada item no pedido e adiciona ao resumo
+  pedido.forEach((item, index) => {
+      const totalItem = item.preco * item.quantidade;
+
+      // Cria um elemento de item de resumo
+      const itemResumo = document.createElement('div');
+      itemResumo.classList.add('item-resumo');
+
+      // Verifica se o item é uma massa e adiciona o botão "Remover" caso seja
+      if (item.nome.startsWith("Massa")) {
+          itemResumo.innerHTML = `
+              <p>${item.nome} - R$ ${totalItem.toFixed(2)}</p>
+              <button class="remover" onclick="removerMassa(${index})">Remover</button>
+          `;
+          console.log("Botão Remover criado para:", item.nome); // Verifique se o log aparece no console
+      } else {
+          itemResumo.innerHTML = `<p>${item.nome} - ${item.quantidade} x R$ ${item.preco.toFixed(2)} = R$ ${totalItem.toFixed(2)}</p>`;
+      }
+
+      // Adiciona o item ao resumo do pedido
+      resumoPedido.appendChild(itemResumo);
+      console.log(resumoPedido.innerHTML); // Verifique se o conteúdo está sendo adicionado ao resumo
+  });
 }
+
+
+
+function removerMassa(index) {
+  // Remove o item do pedido com base no índice fornecido
+  pedido.splice(index, 1);
+
+  // Encontra o elemento de massa na interface e remove a classe `selecionado`
+  const massaElemento = document.querySelector('.item.massa');
+  if (massaElemento) {
+      massaElemento.classList.remove('selecionado');
+  }
+
+  // Oculta o botão de "Remover Massa" após remover o item
+  const botaoRemoverMassa = document.getElementById('botao-remover-massa');
+  if (botaoRemoverMassa) {
+      botaoRemoverMassa.style.display = 'none';
+  }
+
+  // Atualiza o resumo do pedido e a visibilidade do botão "Finalizar Pedido"
+  atualizarResumoPedido();
+  atualizarVisibilidadeBotao();
+
+  // Força a atualização visual do elemento
+  massaElemento.offsetHeight; // Trigger reflow
+}
+
+
 
 // Função para mostrar o modal de confirmação do pedido
 function confirmarPedido() {
@@ -251,27 +349,53 @@ function exibirConfirmacao(mensagem) {
   }, 5000); // Espera 5 segundos antes de recarregar
 }
 
-// Função para iniciar a escolha de quantidade e detalhes de massas
-function iniciarEscolhaMassa(elemento) {
-  quantidadeMassas = parseInt(prompt("Quantas massas você deseja?"), 10);
+// Abre o modal para definir a quantidade de massas
+function abrirModalQuantidade() {
+  document.querySelector('.modal-quantidade').style.display = 'flex';
+  document.querySelector('.modal-background').style.display = 'block';
+}
+
+// Função para fechar o modal de quantidade de massas sem adicionar a massa
+function fecharModalQuantidade() {
+  document.querySelector('.modal-quantidade').style.display = 'none';
+  document.querySelector('.modal-background').style.display = 'none';
+
+  // Remove a seleção visual caso o usuário cancele o processo
+  const itemMassa = document.querySelector('.item.massa');
+  if (itemMassa) {
+    itemMassa.classList.remove('selecionado');
+  }
+}
+
+// Confirma a quantidade de massas e abre o modal de detalhes
+function confirmarQuantidade() {
+  const quantidadeInput = document.getElementById('quantidade-massa');
+  quantidadeMassas = parseInt(quantidadeInput.value, 10);
 
   if (isNaN(quantidadeMassas) || quantidadeMassas <= 0) {
-    alert("Por favor, insira uma quantidade válida.");
+    exibirErroEstilizado("Por favor, insira uma quantidade válida.");
     return;
   }
 
-  elemento.classList.add('selecionado');
-  abrirModalMassa(); // Abre o modal para a primeira massa
+  fecharModalQuantidade();
+  abrirModalMassa(); // Abre o modal de detalhes da primeira massa
 }
 
-// Função para abrir o modal para escolher detalhes da massa
+// Função para iniciar a seleção de massas (abre o modal de quantidade)
+function iniciarEscolhaMassa(elemento) {
+  // Só abre o modal de quantidade, sem adicionar ainda o item ao pedido
+  abrirModalQuantidade();
+  elemento.classList.add('selecionado');
+}
+
+// Abre o modal de detalhes de uma massa específica
 function abrirModalMassa() {
   document.querySelector('.modal-massa').style.display = 'block';
   document.querySelector('.modal-background').style.display = 'block';
   document.querySelector('.modal-massa h2').innerText = `Escolha os detalhes da Massa ${massaAtual} de ${quantidadeMassas}`;
 }
 
-// Função para fechar o modal de massas
+// Fecha o modal de detalhes de massa
 function fecharModalMassa() {
   document.querySelector('.modal-massa').style.display = 'none';
   document.querySelector('.modal-background').style.display = 'none';
@@ -302,8 +426,9 @@ document.querySelectorAll('input[name="ingrediente"]').forEach(checkbox => {
   checkbox.addEventListener('change', verificarLimiteIngredientes);
 });
 
+// Função para exibir o botão "Remover Massa" ao confirmar os detalhes da massa
 function confirmarEscolhaMassa() {
-  const nomeCliente = document.getElementById("nome-massa").value.trim(); // Captura o nome para a massa
+  const nomeCliente = document.getElementById("nome-massa").value.trim();
   const massaEscolhida = document.querySelector('input[name="massa"]:checked');
   const molhosEscolhidos = document.querySelectorAll('input[name="molho"]:checked');
   const ingredientesSelecionados = document.querySelectorAll('input[name="ingrediente"]:checked');
@@ -320,8 +445,8 @@ function confirmarEscolhaMassa() {
   }
 
   const detalhesMassa = {
-    nome: `Massa para ${nomeCliente}`, // Inclui o nome para identificação
-    destinatario: nomeCliente, // Armazena o destinatário
+    nome: `Massa para ${nomeCliente}`,
+    destinatario: nomeCliente,
     preco: 16.00,
     quantidade: 1,
     tipo: massaEscolhida.value,
@@ -332,11 +457,14 @@ function confirmarEscolhaMassa() {
 
   pedido.push(detalhesMassa);
 
+  // Exibe o botão "Remover Massa" após a confirmação da escolha
+  const botaoRemover = document.getElementById("botao-remover-massa");
+  botaoRemover.style.display = 'block';
+
   if (massaAtual < quantidadeMassas) {
     massaAtual++;
-    limparFormularioMassa(); // Limpa o formulário antes de abrir o modal para a próxima massa
-    fecharModalMassa();
-    setTimeout(abrirModalMassa, 500);
+    limparFormularioMassa();
+    abrirModalMassa();
   } else {
     massaAtual = 1;
     quantidadeMassas = 0;
@@ -344,8 +472,9 @@ function confirmarEscolhaMassa() {
     fecharModalMassa();
   }
 
-  atualizarVisibilidadeBotao(); // Garante que o botão "Finalizar Pedido" apareça
+  atualizarVisibilidadeBotao();
 }
+
 
 // Função para limpar o formulário de seleção da massa
 function limparFormularioMassa() {
@@ -354,6 +483,18 @@ function limparFormularioMassa() {
   document.querySelectorAll('input[name="molho"]').forEach(checkbox => checkbox.checked = false); // Desmarca os checkboxes de molho
   document.querySelectorAll('input[name="acompanhamento"]').forEach(checkbox => checkbox.checked = false); // Desmarca os checkboxes de acompanhamento
   document.querySelectorAll('input[name="ingrediente"]').forEach(checkbox => checkbox.checked = false); // Desmarca os checkboxes de ingrediente
+}
+
+// Função para exibir o botão "Remover Massa" logo abaixo do item de massa
+function exibirBotaoRemoverMassa() {
+  const massaSecao = document.querySelector('.secao .massa'); // Seleciona o item de massa
+  if (!document.querySelector('.botao-remover-massa')) { // Verifica se o botão já existe para evitar duplicação
+    const botaoRemover = document.createElement('button');
+    botaoRemover.className = 'botao-remover-massa';
+    botaoRemover.innerText = 'Remover Massa';
+    botaoRemover.onclick = removerMassa;
+    massaSecao.appendChild(botaoRemover); // Adiciona o botão ao item de massa
+  }
 }
 
 
