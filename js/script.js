@@ -272,9 +272,11 @@ function enviarPedido() {
   const bairro = document.getElementById("bairro").value.trim();
   const endereco = document.getElementById("endereco").value.trim();
   const observacao = document.getElementById("observacao").value.trim();
+  const formaPagamento = document.getElementById("forma-pagamento").value;
+  const trocoInput = document.getElementById("troco").value.trim();
 
-  if (!nome || !bairro || !endereco) {
-      exibirErroEstilizado("Por favor, preencha o nome, bairro e endereço antes de prosseguir!");
+  if (!nome || !bairro || !endereco || !formaPagamento) {
+      exibirErroEstilizado("Por favor, preencha todos os campos obrigatórios e selecione uma forma de pagamento!");
       return;
   }
 
@@ -285,9 +287,8 @@ function enviarPedido() {
       const totalItem = item.preco * item.quantidade;
       total += totalItem;
       
-      // Inclui os detalhes da massa e o nome do destinatário
       if (item.nome.startsWith("Massa")) {
-          mensagemPedido += `- *${item.nome} :*\n`; // Corrige o acesso ao destinatário
+          mensagemPedido += `- *${item.nome} :*\n`;
           mensagemPedido += `  - Tipo: ${item.tipo}\n`;
           mensagemPedido += `  - Molhos: ${item.molhos.join(", ")}\n`;
           if (item.ingredientes.length > 0) {
@@ -304,17 +305,39 @@ function enviarPedido() {
 
   total += taxaEntrega;
   mensagemPedido += `\n*Taxa de entrega: R$ ${taxaEntrega.toFixed(2)}*`;
+
+  // Adiciona taxa de maquineta se o pagamento for em débito ou crédito
+  if (formaPagamento === "debito" || formaPagamento === "credito") {
+    total += 1.00;
+    mensagemPedido += `\n*Taxa de maquineta: R$ 1,00*`;
+  }
+
   mensagemPedido += `\n*Total: R$ ${total.toFixed(2)}*\n\n`;
   mensagemPedido += `- *Nome:* ${nome}\n`;
   mensagemPedido += `- *Endereço:* ${endereco}\n`;
   mensagemPedido += `- *Bairro:* ${bairro}\n`;
-  mensagemPedido += `- *Observação:* ${observacao}\n\n`;
-  mensagemPedido += `*Para pagamento via PIX:*\n`;
-  mensagemPedido += `- *Tipo da Chave:* ${tipoChavePix}\n`;
-  mensagemPedido += `- *Chave PIX:* ${chavePix}\n`;
-  mensagemPedido += `- *Banco:* ${banco}\n`;
-  mensagemPedido += `- *Titular:* ${titular}\n\n`;
-  mensagemPedido += `*Obrigado por escolher Ari Jo Lanches!*`;
+  mensagemPedido += `- *Observação:* ${observacao}\n`;
+  mensagemPedido += `- *Forma de Pagamento:* ${formaPagamento.charAt(0).toUpperCase() + formaPagamento.slice(1)}\n`;
+
+  // Adiciona o cálculo do troco se a forma de pagamento for "dinheiro"
+  if (formaPagamento === "dinheiro" && trocoInput) {
+    const trocoCalculado = parseFloat(trocoInput) - total;
+    mensagemPedido += `- *Troco para:* R$ ${parseFloat(trocoInput).toFixed(2)}\n`;
+    if (trocoCalculado > 0) {
+        mensagemPedido += `- *Troco a ser devolvido:* R$ ${trocoCalculado.toFixed(2)}\n`;
+    }
+  }
+
+  // Inclui detalhes para pagamento via PIX
+  if (formaPagamento === "pix") {
+    mensagemPedido += `\n*Para pagamento via PIX:*\n`;
+    mensagemPedido += `- *Tipo da Chave:* ${tipoChavePix}\n`;
+    mensagemPedido += `- *Chave PIX:* ${chavePix}\n`;
+    mensagemPedido += `- *Banco:* ${banco}\n`;
+    mensagemPedido += `- *Titular:* ${titular}\n\n`;
+  }
+
+  mensagemPedido += `*Obrigado por escolher Ari Jô Lanches!*`;
 
   const urlPedido = `https://api.whatsapp.com/send?phone=5585987764006&text=${encodeURIComponent(mensagemPedido)}`;
   window.open(urlPedido, '_blank');
@@ -325,14 +348,27 @@ function enviarPedido() {
   atualizarVisibilidadeBotao();
   cancelarPedido();
 
-  // Limpa as seleções visuais de todos os itens
   document.querySelectorAll('.menu-items .item').forEach(item => item.classList.remove('selecionado'));
 
-  // Define um tempo para recarregar a página após mostrar a confirmação
   setTimeout(() => {
-      location.reload(); // Recarrega a página
-  }, 5000); // Aguarda 5 segundos antes de recarregar
+      location.reload();
+  }, 5000);
 }
+
+
+function calcularTroco() {
+  const trocoInput = document.getElementById("troco").value;
+  const totalPedido = pedido.reduce((acc, item) => acc + item.preco * item.quantidade, 0) + taxaEntrega;
+  const trocoCalculado = parseFloat(trocoInput) - totalPedido;
+
+  const campoTrocoCalculado = document.getElementById("troco-calculado");
+  if (trocoCalculado > 0) {
+      campoTrocoCalculado.innerText = `Troco a ser entregue: R$ ${trocoCalculado.toFixed(2)}`;
+  } else {
+      campoTrocoCalculado.innerText = "";
+  }
+}
+
 
 
 
@@ -496,6 +532,38 @@ function limparFormularioMassa() {
   document.querySelectorAll('input[name="acompanhamento"]').forEach(checkbox => checkbox.checked = false); // Desmarca os checkboxes de acompanhamento
   document.querySelectorAll('input[name="ingrediente"]').forEach(checkbox => checkbox.checked = false); // Desmarca os checkboxes de ingrediente
 }
+
+function atualizarFormaPagamento() {
+  const formaPagamento = document.getElementById("forma-pagamento").value;
+  const campoTroco = document.getElementById("campo-troco");
+  const trocoInput = document.getElementById("troco");
+
+  let total = pedido.reduce((acc, item) => acc + item.preco * item.quantidade, 0);
+
+  // Oculta o campo de troco por padrão
+  campoTroco.style.display = "none";
+  trocoInput.value = "";
+
+  if (formaPagamento === "dinheiro") {
+    // Exibe o campo de troco se o pagamento for em dinheiro
+    campoTroco.style.display = "block";
+  } else if (formaPagamento === "debito" || formaPagamento === "credito") {
+    // Acrescenta R$ 1,00 ao total se o pagamento for em cartão
+    total += 1.00;
+  }
+
+  // Atualiza o total exibido no modal
+  const resumoPedido = document.querySelector('.resumo-pedido');
+  resumoPedido.innerHTML = ''; // Limpa o conteúdo anterior
+  pedido.forEach(item => {
+    const totalItem = item.preco * item.quantidade;
+    resumoPedido.innerHTML += `<p>${item.nome} - ${item.quantidade} x R$ ${item.preco.toFixed(2)} = R$ ${totalItem.toFixed(2)}</p>`;
+  });
+
+  // Adiciona taxa de maquineta ou taxa de entrega no resumo
+  resumoPedido.innerHTML += `<p><strong>Total: R$ ${total.toFixed(2)}</strong></p>`;
+}
+
 
 // Função para exibir o botão "Remover Massa" logo abaixo do item de massa
 function exibirBotaoRemoverMassa() {
