@@ -447,10 +447,19 @@ function confirmarEscolhaMassa() {
     return;
   }
 
+  // Define o preço base da massa
+  let precoMassa = 16.00;
+
+  // Verifica se o ingrediente "Camarão" foi selecionado e ajusta o preço
+  const ingredientes = Array.from(ingredientesSelecionados).map(ing => ing.value);
+  if (ingredientes.includes("Camarão")) {
+    precoMassa = 18.00; // Preço com camarão
+  }
+
   const detalhesMassa = {
     nome: `Massa para ${nomeCliente}`,
     destinatario: nomeCliente,
-    preco: 16.00,
+    preco: precoMassa,
     quantidade: 1,
     tipo: massaEscolhida.value,
     molhos: Array.from(molhosEscolhidos).map(molho => molho.value),
