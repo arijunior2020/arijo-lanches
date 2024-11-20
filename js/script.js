@@ -558,6 +558,7 @@ function confirmarEscolhaMassa() {
   }
 
   atualizarVisibilidadeBotao();
+  salvarPedidoNoLocalStorage();
 }
 
 
