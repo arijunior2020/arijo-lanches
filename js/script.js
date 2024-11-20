@@ -189,7 +189,34 @@ function restaurarSelecaoVisual() {
       elemento.appendChild(controles);
     }
   });
+
+  // Verifica se existe um item do tipo "Massa" no pedido
+  const massaExiste = pedido.some(item => item.nome.startsWith("Massa"));
+  
+  // Recupera ou cria o botão "Remover Massa"
+  let botaoRemoverMassa = document.getElementById('botao-remover-massa');
+  if (massaExiste) {
+    if (!botaoRemoverMassa) {
+      // Cria o botão caso ele não exista
+      const massaSecao = document.querySelector('.secao .massa'); // Certifique-se de que o seletor está correto
+      if (massaSecao) {
+        botaoRemoverMassa = document.createElement('button');
+        botaoRemoverMassa.id = 'botao-remover-massa';
+        botaoRemoverMassa.className = 'botao-remover-massa';
+        botaoRemoverMassa.innerText = 'Remover Massa';
+        botaoRemoverMassa.onclick = () => removerMassa();
+        massaSecao.appendChild(botaoRemoverMassa);
+      }
+    } else {
+      // Exibe o botão caso ele exista
+      botaoRemoverMassa.style.display = 'block';
+    }
+  } else if (botaoRemoverMassa) {
+    // Oculta o botão caso a massa não exista no pedido
+    botaoRemoverMassa.style.display = 'none';
+  }
 }
+
 
 function removerMassa(index) {
   // Remove o item do pedido com base no índice fornecido
