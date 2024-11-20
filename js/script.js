@@ -195,16 +195,19 @@ function removerMassa(index) {
   // Remove o item do pedido com base no índice fornecido
   pedido.splice(index, 1);
 
+  // Salva no localStorage que o botão deve estar oculto
+  localStorage.setItem('botaoRemoverMassaVisivel', 'false');
+
   // Encontra o elemento de massa na interface e remove a classe `selecionado`
   const massaElemento = document.querySelector('.item.massa');
   if (massaElemento) {
-      massaElemento.classList.remove('selecionado');
+    massaElemento.classList.remove('selecionado');
   }
 
   // Oculta o botão de "Remover Massa" após remover o item
   const botaoRemoverMassa = document.getElementById('botao-remover-massa');
   if (botaoRemoverMassa) {
-      botaoRemoverMassa.style.display = 'none';
+    botaoRemoverMassa.style.display = 'none';
   }
 
   // Atualiza o resumo do pedido e a visibilidade do botão "Finalizar Pedido"
@@ -212,9 +215,12 @@ function removerMassa(index) {
   atualizarVisibilidadeBotao();
 
   // Força a atualização visual do elemento
-  massaElemento.offsetHeight; // Trigger reflow
+  massaElemento?.offsetHeight; // Trigger reflow
+
+  // Salva o pedido atualizado no localStorage
   salvarPedidoNoLocalStorage();
 }
+
 
 
 
@@ -547,6 +553,9 @@ function confirmarEscolhaMassa() {
   const botaoRemover = document.getElementById("botao-remover-massa");
   botaoRemover.style.display = 'block';
 
+  // Salva no localStorage que o botão deve estar visível
+  localStorage.setItem('botaoRemoverMassaVisivel', 'true');
+
   if (massaAtual < quantidadeMassas) {
     massaAtual++;
     limparFormularioMassa();
@@ -561,6 +570,7 @@ function confirmarEscolhaMassa() {
   atualizarVisibilidadeBotao();
   salvarPedidoNoLocalStorage();
 }
+
 
 
 // Função para limpar o formulário de seleção da massa
