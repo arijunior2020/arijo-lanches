@@ -213,6 +213,7 @@ function removerMassa(index) {
 
   // Força a atualização visual do elemento
   massaElemento.offsetHeight; // Trigger reflow
+  salvarPedidoNoLocalStorage();
 }
 
 
