@@ -94,7 +94,8 @@ function adicionarItem(nome, preco, elemento) {
   if (itemPedido) {
     return;
   } else {
-    pedido.push({ nome, preco, quantidade: 1 });
+    const idPedido = gerarIdUnico(); // Gera um ID único para o item
+    pedido.push({ id: idPedido, nome, preco, quantidade: 1 });
     elemento.classList.add('selecionado');
 
     // Adiciona os controles de quantidade
@@ -143,6 +144,8 @@ function atualizarVisibilidadeBotao() {
 function atualizarResumoPedido() {
   const totalItens = pedido.reduce((acc, item) => acc + item.quantidade, 0);
   const totalPreco = pedido.reduce((acc, item) => acc + item.preco * item.quantidade, 0);
+
+  // Atualiza o texto do botão "Finalizar Pedido"
   botaoFinalizar.innerText = `Finalizar Pedido - ${totalItens} itens - Total: R$ ${totalPreco.toFixed(2)}`;
 
   // Limpa o conteúdo atual do resumo
@@ -151,26 +154,41 @@ function atualizarResumoPedido() {
 
   // Itera sobre cada item no pedido e adiciona ao resumo
   pedido.forEach((item, index) => {
-      const totalItem = item.preco * item.quantidade;
+    const totalItem = item.preco * item.quantidade;
 
-      // Cria um elemento de item de resumo
-      const itemResumo = document.createElement('div');
-      itemResumo.classList.add('item-resumo');
+    // Cria um elemento para o resumo do item
+    const itemResumo = document.createElement('div');
+    itemResumo.classList.add('item-resumo');
 
-      // Verifica se o item é uma massa e adiciona o botão "Remover" caso seja
-      if (item.nome.startsWith("Massa")) {
-          itemResumo.innerHTML = `
-              <p>${item.nome} - R$ ${totalItem.toFixed(2)}</p>
-              <button class="remover" onclick="removerMassa(${index})">Remover</button>
-          `;
-      } else {
-          itemResumo.innerHTML = `<p>${item.nome} - ${item.quantidade} x R$ ${item.preco.toFixed(2)} = R$ ${totalItem.toFixed(2)}</p>`;
-      }
+    // Adiciona o ID do item ao resumo
+    const idInfo = `<p><strong>ID:</strong> ${item.id}</p>`;
 
-      // Adiciona o item ao resumo do pedido
-      resumoPedido.appendChild(itemResumo);
+    if (item.nome.startsWith("Massa")) {
+      // Adiciona o ID e o botão "Remover" para massas
+      itemResumo.innerHTML = `
+        ${idInfo}
+        <p>${item.nome} - R$ ${totalItem.toFixed(2)}</p>
+        <button class="remover" onclick="removerMassa(${index})">Remover</button>
+      `;
+    } else {
+      // Adiciona o ID e informações de outros itens
+      itemResumo.innerHTML = `
+        ${idInfo}
+        <p>${item.nome} - ${item.quantidade} x R$ ${item.preco.toFixed(2)} = R$ ${totalItem.toFixed(2)}</p>
+      `;
+    }
+
+    // Adiciona o item ao resumo do pedido
+    resumoPedido.appendChild(itemResumo);
   });
+
+  // Atualiza o total do pedido no final do resumo
+  const totalResumo = document.createElement('div');
+  totalResumo.classList.add('total-resumo');
+  totalResumo.innerHTML = `<p><strong>Total:</strong> R$ ${totalPreco.toFixed(2)}</p>`;
+  resumoPedido.appendChild(totalResumo);
 }
+
 
 // Função para restaurar a seleção visual dos itens no pedido
 function restaurarSelecaoVisual() {
@@ -192,7 +210,7 @@ function restaurarSelecaoVisual() {
 
   // Verifica se existe um item do tipo "Massa" no pedido
   const massaExiste = pedido.some(item => item.nome.startsWith("Massa"));
-  
+
   // Recupera ou cria o botão "Remover Massa"
   let botaoRemoverMassa = document.getElementById('botao-remover-massa');
   if (massaExiste) {
@@ -325,6 +343,13 @@ function calcularTaxaEntrega() {
   resumoPedido.innerHTML += `<p><strong>Total com entrega: R$ ${total.toFixed(2)}</strong></p>`;
 }
 
+// Função para Gerar ID para os pedidos
+function gerarIdUnico() {
+  const prefixo = "PED"; // Prefixo fixo para identificar pedidos
+  const numeroAleatorio = Math.floor(1000 + Math.random() * 9000); // Gera um número aleatório de 4 dígitos
+  return `${prefixo}-${numeroAleatorio}`;
+}
+
 // Função para exibir mensagem de erro estilizada
 function exibirErroEstilizado(mensagem) {
   const erro = document.createElement('div');
@@ -346,31 +371,34 @@ function enviarPedido() {
   const trocoInput = document.getElementById("troco").value.trim();
 
   if (!nome || !bairro || !endereco || !formaPagamento) {
-      exibirErroEstilizado("Por favor, preencha todos os campos obrigatórios e selecione uma forma de pagamento!");
-      return;
+    exibirErroEstilizado("Por favor, preencha todos os campos obrigatórios e selecione uma forma de pagamento!");
+    return;
   }
 
   let mensagemPedido = `*Olá, sou ${nome} e gostaria de fazer o pedido:*\n\n`;
   let total = 0;
 
   pedido.forEach(item => {
-      const totalItem = item.preco * item.quantidade;
-      total += totalItem;
-      
-      if (item.nome.startsWith("Massa")) {
-          mensagemPedido += `- *${item.nome} :*\n`;
-          mensagemPedido += `  - Tipo: ${item.tipo}\n`;
-          mensagemPedido += `  - Molhos: ${item.molhos.join(", ")}\n`;
-          if (item.ingredientes.length > 0) {
-              mensagemPedido += `  - Ingredientes: ${item.ingredientes.join(", ")}\n`;
-          }
-          if (item.acompanhamentos.length > 0) {
-              mensagemPedido += `  - Acompanhamentos: ${item.acompanhamentos.join(", ")}\n`;
-          }
-          mensagemPedido += `  - Preço: R$ ${totalItem.toFixed(2)}\n`;
-      } else {
-          mensagemPedido += `- *${item.nome}:* ${item.quantidade} x R$ ${item.preco.toFixed(2)} = R$ ${totalItem.toFixed(2)}\n`;
+    const totalItem = item.preco * item.quantidade;
+    total += totalItem;
+
+    // Inclui o ID do pedido na mensagem
+    mensagemPedido += `- *ID:* ${item.id}\n`;
+
+    if (item.nome.startsWith("Massa")) {
+      mensagemPedido += `- *${item.nome} :*\n`;
+      mensagemPedido += `  - Tipo: ${item.tipo}\n`;
+      mensagemPedido += `  - Molhos: ${item.molhos.join(", ")}\n`;
+      if (item.ingredientes.length > 0) {
+        mensagemPedido += `  - Ingredientes: ${item.ingredientes.join(", ")}\n`;
       }
+      if (item.acompanhamentos.length > 0) {
+        mensagemPedido += `  - Acompanhamentos: ${item.acompanhamentos.join(", ")}\n`;
+      }
+      mensagemPedido += `  - Preço: R$ ${totalItem.toFixed(2)}\n`;
+    } else {
+      mensagemPedido += `- *${item.nome}:* ${item.quantidade} x R$ ${item.preco.toFixed(2)} = R$ ${totalItem.toFixed(2)}\n`;
+    }
   });
 
   total += taxaEntrega;
@@ -394,7 +422,7 @@ function enviarPedido() {
     const trocoCalculado = parseFloat(trocoInput) - total;
     mensagemPedido += `- *Troco para:* R$ ${parseFloat(trocoInput).toFixed(2)}\n`;
     if (trocoCalculado > 0) {
-        mensagemPedido += `- *Troco a ser devolvido:* R$ ${trocoCalculado.toFixed(2)}\n`;
+      mensagemPedido += `- *Troco a ser devolvido:* R$ ${trocoCalculado.toFixed(2)}\n`;
     }
   }
 
@@ -422,7 +450,7 @@ function enviarPedido() {
   document.querySelectorAll('.menu-items .item').forEach(item => item.classList.remove('selecionado'));
 
   setTimeout(() => {
-      location.reload();
+    location.reload();
   }, 5000);
 }
 
@@ -434,9 +462,9 @@ function calcularTroco() {
 
   const campoTrocoCalculado = document.getElementById("troco-calculado");
   if (trocoCalculado > 0) {
-      campoTrocoCalculado.innerText = `Troco a ser entregue: R$ ${trocoCalculado.toFixed(2)}`;
+    campoTrocoCalculado.innerText = `Troco a ser entregue: R$ ${trocoCalculado.toFixed(2)}`;
   } else {
-      campoTrocoCalculado.innerText = "";
+    campoTrocoCalculado.innerText = "";
   }
 }
 
@@ -563,7 +591,11 @@ function confirmarEscolhaMassa() {
     precoMassa = 18.00; // Preço com camarão
   }
 
+  // Gera um ID único para o pedido
+  const idPedido = gerarIdUnico();
+
   const detalhesMassa = {
+    id: idPedido,
     nome: `Massa para ${nomeCliente}`,
     destinatario: nomeCliente,
     preco: precoMassa,
@@ -709,32 +741,32 @@ function toggleMenu() {
 
 async function carregarItensDisponiveis() {
   try {
-      // Carregar o JSON com os itens disponíveis
-      const response = await fetch('js/diasDisponiveis.json');
-      if (!response.ok) {
-          throw new Error("Erro ao carregar o arquivo JSON");
+    // Carregar o JSON com os itens disponíveis
+    const response = await fetch('js/diasDisponiveis.json');
+    if (!response.ok) {
+      throw new Error("Erro ao carregar o arquivo JSON");
+    }
+
+    const diasDisponiveis = await response.json();
+
+    // Obter o dia da semana
+    const diasSemana = ["domingo", "segunda", "terca", "quarta", "quinta", "sexta", "sabado"];
+    const diaAtual = diasSemana[new Date().getDay()];
+
+    // Obter os itens do dia atual
+    const itensDisponiveis = diasDisponiveis[diaAtual];
+
+    // Ocultar ou mostrar seções com base nos itens disponíveis
+    document.querySelectorAll('.secao').forEach(secao => {
+      const idSecao = secao.getAttribute('data-secao');
+      if (itensDisponiveis.includes(idSecao)) {
+        secao.style.display = "block";
+      } else {
+        secao.style.display = "none";
       }
-
-      const diasDisponiveis = await response.json();
-
-      // Obter o dia da semana
-      const diasSemana = ["domingo", "segunda", "terca", "quarta", "quinta", "sexta", "sabado"];
-      const diaAtual = diasSemana[new Date().getDay()];
-
-      // Obter os itens do dia atual
-      const itensDisponiveis = diasDisponiveis[diaAtual];
-
-      // Ocultar ou mostrar seções com base nos itens disponíveis
-      document.querySelectorAll('.secao').forEach(secao => {
-          const idSecao = secao.getAttribute('data-secao');
-          if (itensDisponiveis.includes(idSecao)) {
-              secao.style.display = "block";
-          } else {
-              secao.style.display = "none";
-          }
-      });
+    });
   } catch (error) {
-      console.error("Erro ao carregar os itens disponíveis:", error);
+    console.error("Erro ao carregar os itens disponíveis:", error);
   }
 }
 
