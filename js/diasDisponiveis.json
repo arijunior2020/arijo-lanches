@@ -5,5 +5,5 @@
   "quinta": ["hamburguer", "massas", "bebidas"],
   "sexta": ["hamburguer", "batata_frita", "bebidas", "diversos"],
   "sabado": ["hamburguer", "cachorro_quente", "pratinho", "batata_frita", "massas", "bebidas", "diversos"],
-  "domingo": ["hamburguer", "bebidas"]
+  "domingo": ["cachorro_quente", "pratinho", "massas", "bebidas"]
 }
