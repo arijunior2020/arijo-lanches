@@ -1,6 +1,6 @@
 {
   "segunda": ["hamburguer", "bebidas"],
-  "terca": [""],
+  "terca": ["hamburguer", "cachorro_quente", "bebidas"],
   "quarta": ["hamburguer", "cachorro_quente", "pratinho", "massas", "bebidas", "diversos"],
   "quinta": ["hamburguer", "massas", "bebidas"],
   "sexta": ["hamburguer", "batata_frita", "bebidas", "diversos"],
