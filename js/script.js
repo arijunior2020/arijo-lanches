@@ -453,7 +453,7 @@ async function enviarPedido() {
 
   try {
     // Envia o pedido para o backend usando axios
-    const response = await axios.post("https://arijolanchesemassas.com.br/api/admin/orders", pedidoBackend);
+    const response = await axios.post("https://api.arijolanchesemassas.com.br/api/admin/orders", pedidoBackend);
 
     if (response.status === 201) {
       exibirConfirmacao("Pedido confirmado e enviado para o backend!");
