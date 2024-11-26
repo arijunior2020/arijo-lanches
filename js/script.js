@@ -8,6 +8,7 @@ let taxaEntrega = 0;
 let massaAtual = 1;
 let quantidadeMassas = 0;
 
+
 const botaoFinalizar = document.querySelector('.finalizar-pedido');
 
 // Função para salvar o pedido no localStorage
@@ -144,8 +145,6 @@ function atualizarVisibilidadeBotao() {
 function atualizarResumoPedido() {
   const totalItens = pedido.reduce((acc, item) => acc + item.quantidade, 0);
   const totalPreco = pedido.reduce((acc, item) => acc + item.preco * item.quantidade, 0);
-
-  // Atualiza o texto do botão "Finalizar Pedido"
   botaoFinalizar.innerText = `Finalizar Pedido - ${totalItens} itens - Total: R$ ${totalPreco.toFixed(2)}`;
 
   // Limpa o conteúdo atual do resumo
@@ -156,26 +155,25 @@ function atualizarResumoPedido() {
   pedido.forEach((item, index) => {
     const totalItem = item.preco * item.quantidade;
 
-    // Cria um elemento para o resumo do item
+    // Cria um elemento de item de resumo
     const itemResumo = document.createElement('div');
     itemResumo.classList.add('item-resumo');
 
     // Adiciona o ID do item ao resumo
     const idInfo = `<p><strong>ID:</strong> ${item.id}</p>`;
 
+    // Verifica se o item é uma massa e adiciona o botão "Remover" caso seja
     if (item.nome.startsWith("Massa")) {
-      // Adiciona o ID e o botão "Remover" para massas
       itemResumo.innerHTML = `
-        ${idInfo}
-        <p>${item.nome} - R$ ${totalItem.toFixed(2)}</p>
-        <button class="remover" onclick="removerMassa(${index})">Remover</button>
-      `;
+              <p>${item.nome} - R$ ${totalItem.toFixed(2)}</p>
+              <button class="remover" onclick="removerMassa(${index})">Remover</button>
+          `;
     } else {
       // Adiciona o ID e informações de outros itens
       itemResumo.innerHTML = `
-        ${idInfo}
-        <p>${item.nome} - ${item.quantidade} x R$ ${item.preco.toFixed(2)} = R$ ${totalItem.toFixed(2)}</p>
-      `;
+      ${idInfo}
+      <p>${item.nome} - ${item.quantidade} x R$ ${item.preco.toFixed(2)} = R$ ${totalItem.toFixed(2)}</p>
+    `;
     }
 
     // Adiciona o item ao resumo do pedido
@@ -188,6 +186,7 @@ function atualizarResumoPedido() {
   totalResumo.innerHTML = `<p><strong>Total:</strong> R$ ${totalPreco.toFixed(2)}</p>`;
   resumoPedido.appendChild(totalResumo);
 }
+
 
 
 // Função para restaurar a seleção visual dos itens no pedido
@@ -260,12 +259,11 @@ function removerMassa(index) {
   atualizarVisibilidadeBotao();
 
   // Força a atualização visual do elemento
-  massaElemento?.offsetHeight; // Trigger reflow
+  massaElemento.offsetHeight; // Trigger reflow
 
   // Salva o pedido atualizado no localStorage
   salvarPedidoNoLocalStorage();
 }
-
 
 
 
@@ -362,7 +360,7 @@ function exibirErroEstilizado(mensagem) {
   }, 3000);
 }
 
-function enviarPedido() {
+async function enviarPedido() {
   const nome = document.getElementById("nome").value.trim();
   const bairro = document.getElementById("bairro").value.trim();
   const endereco = document.getElementById("endereco").value.trim();
@@ -378,6 +376,7 @@ function enviarPedido() {
   let mensagemPedido = `*Olá, sou ${nome} e gostaria de fazer o pedido:*\n\n`;
   let total = 0;
 
+  // Monta a mensagem do pedido e calcula o total
   pedido.forEach(item => {
     const totalItem = item.preco * item.quantidade;
     total += totalItem;
@@ -404,7 +403,7 @@ function enviarPedido() {
   total += taxaEntrega;
   mensagemPedido += `\n*Taxa de entrega: R$ ${taxaEntrega.toFixed(2)}*`;
 
-  // Adiciona taxa de maquineta se o pagamento for em débito ou crédito
+  // Adiciona taxa de maquineta, se necessário
   if (formaPagamento === "debito" || formaPagamento === "credito") {
     total += 1.00;
     mensagemPedido += `\n*Taxa de maquineta: R$ 1,00*`;
@@ -417,7 +416,7 @@ function enviarPedido() {
   mensagemPedido += `- *Observação:* ${observacao}\n`;
   mensagemPedido += `- *Forma de Pagamento:* ${formaPagamento.charAt(0).toUpperCase() + formaPagamento.slice(1)}\n`;
 
-  // Adiciona o cálculo do troco se a forma de pagamento for "dinheiro"
+  // Adiciona troco, se necessário
   if (formaPagamento === "dinheiro" && trocoInput) {
     const trocoCalculado = parseFloat(trocoInput) - total;
     mensagemPedido += `- *Troco para:* R$ ${parseFloat(trocoInput).toFixed(2)}\n`;
@@ -426,7 +425,7 @@ function enviarPedido() {
     }
   }
 
-  // Inclui detalhes para pagamento via PIX
+  // Adiciona detalhes para pagamento via PIX
   if (formaPagamento === "pix") {
     mensagemPedido += `\n*Para pagamento via PIX:*\n`;
     mensagemPedido += `- *Tipo da Chave:* ${tipoChavePix}\n`;
@@ -437,22 +436,55 @@ function enviarPedido() {
 
   mensagemPedido += `*Obrigado por escolher Ari Jô Lanches!*`;
 
-  const urlPedido = `https://api.whatsapp.com/send?phone=5585987764006&text=${encodeURIComponent(mensagemPedido)}`;
-  window.open(urlPedido, '_blank');
+  // Objeto do pedido para o backend
+  const pedidoBackend = {
+    cliente: nome,
+    endereco: endereco,
+    bairro: bairro,
+    itens: pedido.map(item => ({
+      name: item.nome,
+      price: item.preco,
+      quantity: item.quantidade,
+    })),
+    total: total.toFixed(2),
+    payment_method: formaPagamento,
+    note: observacao || null,
+  };
 
-  exibirConfirmacao("Pedido confirmado e enviado para o WhatsApp!");
-  pedido = [];
-  atualizarResumoPedido();
-  atualizarVisibilidadeBotao();
-  cancelarPedido();
-  localStorage.removeItem('pedido'); // Remove o pedido do localStorage
+  try {
+    // Envia o pedido para o backend usando axios
+    const response = await axios.post("http://localhost:5000/api/admin/orders", pedidoBackend);
 
-  document.querySelectorAll('.menu-items .item').forEach(item => item.classList.remove('selecionado'));
+    if (response.status === 201) {
+      exibirConfirmacao("Pedido confirmado e enviado para o backend!");
+      pedido = [];
+      atualizarResumoPedido();
+      atualizarVisibilidadeBotao();
+      localStorage.removeItem('pedido'); // Limpa o localStorage
+    }
 
-  setTimeout(() => {
-    location.reload();
-  }, 5000);
+    // Abre o WhatsApp com a mensagem gerada
+    const urlPedido = `https://api.whatsapp.com/send?phone=5585987764006&text=${encodeURIComponent(mensagemPedido)}`;
+    window.open(urlPedido, '_blank');
+
+    exibirConfirmacao("Pedido confirmado e enviado para o WhatsApp!");
+    pedido = [];
+    atualizarResumoPedido();
+    atualizarVisibilidadeBotao();
+    cancelarPedido();
+    localStorage.removeItem('pedido'); // Remove o pedido do localStorage
+
+    document.querySelectorAll('.menu-items .item').forEach(item => item.classList.remove('selecionado'));
+
+    setTimeout(() => {
+      location.reload();
+    }, 5000);
+  } catch (error) {
+    console.error("Erro ao enviar o pedido:", error);
+    exibirErroEstilizado("Não foi possível enviar o pedido. Tente novamente mais tarde.");
+  }
 }
+
 
 
 function calcularTroco() {
@@ -629,7 +661,6 @@ function confirmarEscolhaMassa() {
   atualizarVisibilidadeBotao();
   salvarPedidoNoLocalStorage();
 }
-
 
 
 // Função para limpar o formulário de seleção da massa
