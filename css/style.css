@@ -1,528 +1,536 @@
 main {
-    padding-bottom: 80px; /* Adicione um espaço igual ou maior que a altura do botão */
+  padding-bottom: 80px; /* Adicione um espaço igual ou maior que a altura do botão */
 }
-
 
 /* Classe para o efeito de item selecionado */
 .selecionado {
-    border: 2px solid #C83A31; /* Borda vermelha para indicar seleção */
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); /* Sombra leve */
-    transform: scale(1.05); /* Aumenta o item ligeiramente ao ser selecionado */
-    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Efeito de transição suave */
+  border: 2px solid #c83a31; /* Borda vermelha para indicar seleção */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); /* Sombra leve */
+  transform: scale(1.05); /* Aumenta o item ligeiramente ao ser selecionado */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Efeito de transição suave */
 }
 
 /* Reseta e estilos gerais */
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f8f8f8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
+  font-family: "Roboto", sans-serif;
+  background-color: #f8f8f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
 }
 
 h2 {
-    margin: 20px 0;
+  margin: 20px 0;
 }
 
 /* Estilos do Cabeçalho */
 header {
-    background-color: #C83A31;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 20px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw; /* Garantir que o header ocupe a largura da viewport */
-    z-index: 1000;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    color: #fff;
+  background-color: #c83a31;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw; /* Garantir que o header ocupe a largura da viewport */
+  z-index: 1000;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  color: #fff;
 }
 
 /* Estilos da Logo */
 .logo {
-    width: 50px;
-    height: auto;
+  width: 50px;
+  height: auto;
 }
 
 /* Estilos do Conteúdo do Cabeçalho */
 .header-content {
-    text-align: center;
-    flex: 1;
+  text-align: center;
+  flex: 1;
 }
 
 .header-content h1 {
-    font-family: 'Righteous', sans-serif;
-    font-size: 24px;
-    margin: 0;
+  font-family: "Righteous", sans-serif;
+  font-size: 24px;
+  margin: 0;
 }
 
 .header-content p {
-    font-size: 14px;
-    margin: 0;
+  font-size: 14px;
+  margin: 0;
 }
 
 /* Ícone do Menu Hamburguer */
 .menu-icon {
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
 }
 
 .menu-icon span {
-    width: 25px;
-    height: 3px;
-    background-color: #fff;
-    margin: 3px 0;
-    transition: all 0.3s ease;
+  width: 25px;
+  height: 3px;
+  background-color: #fff;
+  margin: 3px 0;
+  transition: all 0.3s ease;
 }
 
 /* Menu suspenso */
 .dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 60px;
-    right: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: none;
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .dropdown-menu ul {
-    list-style: none;
-    margin: 0;
-    padding: 10px 0;
+  list-style: none;
+  margin: 0;
+  padding: 10px 0;
 }
 
 .dropdown-menu li {
-    padding: 10px 20px;
+  padding: 10px 20px;
 }
 
 .dropdown-menu li a {
-    text-decoration: none;
-    color: #333;
-    font-weight: 600;
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
 }
 
 /* Exibir o menu quando ativado */
 .dropdown-menu.show {
-    display: block;
+  display: block;
 }
 
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 20px;
-    margin-top: 92px;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 92px;
 }
 
 .secao {
-    text-align: center;
-    margin-top: 20px;
+  text-align: center;
+  margin-top: 20px;
 }
 
 .menu-items {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    padding-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding-bottom: 10px;
 }
 
 .item {
-    width: 150px;
-    background: #FFFFFF;
-    border-radius: 8px;
-    padding: 10px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    cursor: pointer;
-    transition: box-shadow 0.2s ease, transform 0.2s ease; /* Transição suave */
+  width: 150px;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.2s ease; /* Transição suave */
 }
 
 .item img {
-    width: 100%;
-    max-width: 120px;
-    border-radius: 8px;
-    object-fit: cover;
+  width: 100%;
+  max-width: 120px;
+  border-radius: 8px;
+  object-fit: cover;
 }
 
 .finalizar-pedido {
-    background-color: #C83A31;
-    color: white;
-    padding: 20px;
-    font-size: 18px;
-    cursor: pointer;
-    position: fixed;
-    bottom: 10px;
-    width: calc(100% - 40px);
-    max-width: 400px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 50px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  background-color: #c83a31;
+  color: white;
+  padding: 20px;
+  font-size: 18px;
+  cursor: pointer;
+  position: fixed;
+  bottom: 10px;
+  width: calc(100% - 40px);
+  max-width: 400px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 /* Camada de fundo para desfoque */
 .modal-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4); /* Fundo semitransparente */
-    backdrop-filter: blur(8px); /* Aplica desfoque no fundo */
-    z-index: 998; /* Coloca a camada de fundo abaixo do modal */
-    display: none; /* Inicia escondido */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* Fundo semitransparente */
+  backdrop-filter: blur(8px); /* Aplica desfoque no fundo */
+  z-index: 998; /* Coloca a camada de fundo abaixo do modal */
+  display: none; /* Inicia escondido */
 }
 
 /* Estilos gerais para o modal */
 .modal-confirmacao {
-    background-color: #C83A31;
-    border-radius: 15px;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
-    padding: 20px;
-    width: 320px;
-    max-width: 90vw; /* Responsivo para telas menores */
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Centraliza o modal */
-    display: none; /* Esconde o modal até ser necessário */
-    flex-direction: column;
-    align-items: center;
-    z-index: 1000; /* Coloca o modal acima da camada de fundo */
+  background-color: #c83a31;
+  border-radius: 15px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  width: 320px;
+  max-width: 90vw; /* Responsivo para telas menores */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centraliza o modal */
+  display: none; /* Esconde o modal até ser necessário */
+  flex-direction: column;
+  align-items: center;
+  z-index: 1000; /* Coloca o modal acima da camada de fundo */
 }
 
 /* Centralização e estilo do conteúdo do modal */
 .modal-conteudo {
-    text-align: center;
-    color: white;
+  text-align: center;
+  color: white;
 }
 
 /* Estilo para o título do modal com ícone */
 .confirmar-texto {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    color: #fff;
-    gap: 5px;
-    text-align: center;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #fff;
+  gap: 5px;
+  text-align: center;
+  width: 100%;
 }
 
 .icon-check {
-    font-size: 1.5em;
-    color: #32B72F !important;
+  font-size: 1.5em;
+  color: #32b72f !important;
 }
 
 /* Linha divisora no modal */
 .modal-divider {
-    border: none;
-    border-top: 1px solid #fff;
-    margin: 10px 0;
-    opacity: 0.6;
+  border: none;
+  border-top: 1px solid #fff;
+  margin: 10px 0;
+  opacity: 0.6;
 }
 
 /* Estilos dos botões do modal */
-.confirmar, .cancelar {
-    padding: 10px 20px;
-    font-size: 18px;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
+.confirmar,
+.cancelar {
+  padding: 10px 20px;
+  font-size: 18px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
 }
 
 .confirmar {
-    background-color: #32B72F;
-    color: white;
+  background-color: #32b72f;
+  color: white;
 }
 
 .quantidade-controle {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-top: 5px;
-  }
-  
-  .quantidade-controle button {
-    padding: 5px;
-    font-size: 1rem;
-  }
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.quantidade-controle button {
+  padding: 5px;
+  font-size: 1rem;
+}
 
 .cancelar {
-    background-color: #b5b5b5;
-    color: white;
+  background-color: #b5b5b5;
+  color: white;
 }
 
 /* Campo de input do bairro */
 .form-endereco {
-    margin: 15px 0;
-    text-align: left;
+  margin: 15px 0;
+  text-align: left;
 }
 
 .form-endereco label {
-    font-size: 16px;
-    color: #fff;
-    font-weight: bold;
+  font-size: 16px;
+  color: #fff;
+  font-weight: bold;
 }
 
 .form-endereco input {
-    width: 100%;
-    padding: 8px 12px;
-    margin-top: 5px;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  padding: 8px 12px;
+  margin-top: 5px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 #taxa-entrega {
-    font-size: 16px;
-    color: #7DDA58;
-    font-weight: bold;
-    margin-top: 10px;
+  font-size: 16px;
+  color: #7dda58;
+  font-weight: bold;
+  margin-top: 10px;
 }
 
 /* Classe para aplicar desfoque */
 .blur {
-    filter: blur(8px); /* Ajuste o valor para o nível de desfoque desejado */
+  filter: blur(8px); /* Ajuste o valor para o nível de desfoque desejado */
 }
 
 /* Estilo da mensagem de erro */
 .erro-mensagem {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #ff4444;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    font-size: 16px;
-    z-index: 1001; /* Coloca a mensagem acima do modal */
-    animation: fadeInOut 3s;
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ff4444;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+  z-index: 1001; /* Coloca a mensagem acima do modal */
+  animation: fadeInOut 3s;
 }
 
 .modal-quantidade {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding: 15px 20px;
-    border-radius: 8px;
-    width: 80vw;
-    max-width: 300px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    z-index: 1001;
-    text-align: center;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 15px 20px;
+  border-radius: 8px;
+  width: 80vw;
+  max-width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  text-align: center;
 }
 
 .modal-quantidade .modal-titulo {
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
 }
 
 .input-quantidade {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    margin-bottom: 15px;
-    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.1);
-    transition: border-color 0.3s ease;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 15px;
+  box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease;
 }
 
 .input-quantidade:focus {
-    border-color: #C83A31;
-    outline: none;
+  border-color: #c83a31;
+  outline: none;
 }
 
 .modal-quantidade .botoes {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 }
 
 .modal-quantidade .confirmar,
 .modal-quantidade .cancelar {
-    flex: 1;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    border: none;
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
 }
 
 .modal-quantidade .confirmar {
-    background-color: #32B72F;
-    color: #fff;
+  background-color: #32b72f;
+  color: #fff;
 }
 
 .modal-quantidade .cancelar {
-    background-color: #b5b5b5;
-    color: #fff;
+  background-color: #b5b5b5;
+  color: #fff;
 }
 
 .input-estilo {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    margin-bottom: 15px;
-    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.1);
-    transition: border-color 0.3s ease;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 15px;
+  box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease;
 }
 
 .input-estilo:focus {
-    border-color: #C83A31;
-    outline: none;
+  border-color: #c83a31;
+  outline: none;
 }
 
 .modal-massa {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    z-index: 1000;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 1000;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 .modal-background {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
 }
 
 .item-resumo {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-
 #botao-remover-massa {
-    margin-top: 10px;
-    padding: 10px;
-    font-size: 16px;
-    background-color: #ff4444;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-    max-width: 150px;
-    display: none; /* Inicia oculto */
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #ff4444;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 150px;
+  display: none; /* Inicia oculto */
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #botao-remover-massa:hover {
-    background-color: #cc0000;
+  background-color: #cc0000;
 }
 
 /* Estilização do campo de seleção (select) */
 .form-endereco select {
-    width: 100%;
-    padding: 8px 12px;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-    background-color: #ffffff; /* Fundo branco */
-    color: #333; /* Cor do texto */
-    appearance: none; /* Remove o estilo padrão do navegador */
-    -webkit-appearance: none; /* Compatibilidade com Safari */
-    -moz-appearance: none; /* Compatibilidade com Firefox */
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff; /* Fundo branco */
+  color: #333; /* Cor do texto */
+  appearance: none; /* Remove o estilo padrão do navegador */
+  -webkit-appearance: none; /* Compatibilidade com Safari */
+  -moz-appearance: none; /* Compatibilidade com Firefox */
 }
 
 /* Adiciona uma seta personalizada ao select */
 .form-endereco select {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%23333"><polygon points="7,10 12,15 17,10"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 12px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="%23333"><polygon points="7,10 12,15 17,10"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px;
 }
 
 /* Estilo para quando o select estiver focado */
 .form-endereco select:focus {
-    outline: none;
-    border-color: #C83A31; /* Cor de destaque ao focar */
-    box-shadow: 0 0 5px rgba(200, 58, 49, 0.5); /* Sombra suave */
+  outline: none;
+  border-color: #c83a31; /* Cor de destaque ao focar */
+  box-shadow: 0 0 5px rgba(200, 58, 49, 0.5); /* Sombra suave */
 }
 
 #troco-calculado {
-    color: #7DDA58 !important; /* Verde para combinar com a taxa */
-    font-weight: bold;
-    margin-top: 10px; /* Adiciona uma margem superior para espaçamento */
+  color: #7dda58 !important; /* Verde para combinar com a taxa */
+  font-weight: bold;
+  margin-top: 10px; /* Adiciona uma margem superior para espaçamento */
 }
 
 /* Animação de entrada e saída */
 @keyframes fadeInOut {
-    0% { opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 /* Ajustes específicos para telas pequenas */
 @media (max-width: 600px) {
-    .modal-confirmacao {
-        width: 80vw; /* Ajusta a largura para ocupar quase toda a tela */
-        max-width: 90vw; /* Assegura que a largura respeite a tela menor */
-        padding: 15px; /* Reduz o padding em telas menores */
-    }
+  .modal-confirmacao {
+    width: 80vw; /* Ajusta a largura para ocupar quase toda a tela */
+    max-width: 90vw; /* Assegura que a largura respeite a tela menor */
+    padding: 15px; /* Reduz o padding em telas menores */
+  }
 
-    /* Ajusta o tamanho da fonte para dispositivos menores */
-    .confirmar-texto {
-        font-size: 18px;
-    }
+  /* Ajusta o tamanho da fonte para dispositivos menores */
+  .confirmar-texto {
+    font-size: 18px;
+  }
 
-    .confirmar, .cancelar {
-        font-size: 14px;
-    }
+  .confirmar,
+  .cancelar {
+    font-size: 14px;
+  }
 
-    /* Estilo da mensagem de erro */
-.erro-mensagem {
+  /* Estilo da mensagem de erro */
+  .erro-mensagem {
     position: fixed;
     top: 40px;
     left: 50%;
@@ -535,89 +543,108 @@ header {
     font-size: 14px;
     z-index: 1001; /* Coloca a mensagem acima do modal */
     animation: fadeInOut 3s;
-}
+  }
 }
 
 .modal-massa {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90vw;
-    max-width: 400px;
-    background-color: #C83A31;
-    border-radius: 15px;
-    padding: 20px;
-    display: none; /* Começa escondido */
-    z-index: 1001;
-    color: white;
-    overflow-y: auto; /* Permite rolagem se o conteúdo for muito grande */
-    max-height: 80vh; /* Limita a altura do modal para evitar que ultrapasse a tela */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  max-width: 400px;
+  background-color: #c83a31;
+  border-radius: 15px;
+  padding: 20px;
+  display: none; /* Começa escondido */
+  z-index: 1001;
+  color: white;
+  overflow-y: auto; /* Permite rolagem se o conteúdo for muito grande */
+  max-height: 80vh; /* Limita a altura do modal para evitar que ultrapasse a tela */
 }
 
 .modal-massa .modal-conteudo {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
 }
 
-.modal-massa h2, .modal-massa h3 {
-    color: #ffffff;
+.modal-massa h2,
+.modal-massa h3 {
+  color: #ffffff;
 }
 
 .modal-massa label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 16px;
+  display: block;
+  margin-bottom: 5px;
+  font-size: 16px;
 }
 
 .modal-massa .confirmar,
 .modal-massa .cancelar {
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 100%;
-    box-sizing: border-box;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .modal-massa .confirmar {
-    background-color: #32B72F;
-    color: #fff;
+  background-color: #32b72f;
+  color: #fff;
 }
 
 .modal-massa .cancelar {
-    background-color: #b5b5b5;
-    color: #fff;
+  background-color: #b5b5b5;
+  color: #fff;
 }
 
 /* Estilo da mensagem de confirmação */
 .confirmacao-mensagem {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #32B72F; /* Verde para indicar sucesso */
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    font-size: 16px;
-    z-index: 1001; /* Coloca a mensagem acima do modal */
-    animation: fadeInOut 3s;
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #32b72f; /* Verde para indicar sucesso */
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+  z-index: 1001; /* Coloca a mensagem acima do modal */
+  animation: fadeInOut 3s;
 }
 
 .confirmar:disabled {
-    background-color: #b5b5b5; /* Cor mais clara para o botão desabilitado */
-    cursor: not-allowed; /* Muda o cursor para indicar que não está clicável */
-    opacity: 0.6; /* Torna o botão mais transparente */
+  background-color: #b5b5b5; /* Cor mais clara para o botão desabilitado */
+  cursor: not-allowed; /* Muda o cursor para indicar que não está clicável */
+  opacity: 0.6; /* Torna o botão mais transparente */
 }
 
 .modal-confirmacao .modal-conteudo {
-    max-height: 80vh; /* Limita a altura do modal a 80% da altura da tela */
-    overflow-y: auto; /* Habilita a rolagem vertical quando o conteúdo excede a altura máxima */
-    padding-right: 15px; /* Adiciona um pouco de espaço à direita para evitar o sobreposição com a barra de rolagem */
+  max-height: 80vh; /* Limita a altura do modal a 80% da altura da tela */
+  overflow-y: auto; /* Habilita a rolagem vertical quando o conteúdo excede a altura máxima */
+  padding-right: 15px; /* Adiciona um pouco de espaço à direita para evitar o sobreposição com a barra de rolagem */
 }
 
-
+/* Banner centralizado na tela */
+.banner-loja-fechada {
+    position: fixed;
+    top: 50%; /* Centralizado verticalmente */
+    left: 50%; /* Centralizado horizontalmente */
+    transform: translate(-50%, -50%); /* Ajusta o centro do elemento */
+    background-color: #c83a31;
+    color: #fff;
+    text-align: center;
+    padding: 20px 30px;
+    z-index: 1000;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para destaque */
+    max-width: 600px; /* Limita a largura do banner */
+    width: 80%; /* Responsivo */
+    line-height: 1.5; /* Melhor leitura */
+  }

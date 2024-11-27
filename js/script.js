@@ -7,9 +7,61 @@ const titular = "JOSE ARIMATEIA RODRIGUES JUNIOR";
 let taxaEntrega = 0;
 let massaAtual = 1;
 let quantidadeMassas = 0;
-
+// Variável global para controlar a abertura da loja manualmente
+let lojaAbertaManualmente = false; // Define como `true` (aberta) por padrão
 
 const botaoFinalizar = document.querySelector('.finalizar-pedido');
+
+
+// Função para exibir o banner informando que a loja está fechada
+function exibirBannerLojaFechada(motivo) {
+  // Verifica se o banner já existe para evitar duplicação
+  if (document.getElementById("banner-loja-fechada")) return;
+
+  // Cria o elemento do banner
+  const banner = document.createElement("div");
+  banner.id = "banner-loja-fechada";
+  banner.className = "banner-loja-fechada";
+
+  // Define o conteúdo do banner com base no motivo
+  if (motivo === "horario") {
+    banner.innerHTML = `
+      <strong>Loja Fechada:</strong> Nosso horário de atendimento é das <strong>18h às 22h</strong>.
+      Volte mais tarde para fazer seu pedido.
+    `;
+  } else if (motivo === "manual") {
+    banner.innerHTML = `
+      <strong>Loja Fechada:</strong> A loja está fechada no momento por motivos excepcionais.
+      Por favor, volte mais tarde.
+    `;
+  }
+
+  // Adiciona o banner ao corpo do documento
+  document.body.appendChild(banner);
+}
+
+// Função para verificar se a loja está aberta
+function verificarHorarioDeFuncionamento() {
+  const agora = new Date();
+  const horaAtual = agora.getHours();
+  const minutosAtuais = agora.getMinutes();
+
+  console.log(`Horário atual: ${horaAtual}:${minutosAtuais}`);
+  console.log(`Loja aberta manualmente: ${lojaAbertaManualmente}`);
+
+  // Horário de funcionamento: das 18h às 22h
+  const dentroHorario = horaAtual >= 18 && horaAtual < 22;
+
+  // Verifica o motivo do fechamento
+  if (!dentroHorario) {
+    exibirBannerLojaFechada("horario");
+  } else if (!lojaAbertaManualmente) {
+    exibirBannerLojaFechada("manual");
+  }
+}
+
+
+
 
 // Função para salvar o pedido no localStorage
 function salvarPedidoNoLocalStorage() {
@@ -808,6 +860,7 @@ async function carregarItensDisponiveis() {
 
 // Função para inicializar a aplicação
 function iniciarAplicacao() {
+  verificarHorarioDeFuncionamento(); // Verifica se o horário de funcionamento é válido
   carregarPedidoDoLocalStorage(); // Carrega o pedido salvo
   atualizarVisibilidadeBotao();
   carregarItensDisponiveis(); // Carrega os itens disponíveis com base no dia da semana
