@@ -493,11 +493,25 @@ async function enviarPedido() {
     cliente: nome,
     endereco: endereco,
     bairro: bairro,
-    itens: pedido.map(item => ({
-      name: item.nome,
-      price: item.preco,
-      quantity: item.quantidade,
-    })),
+    itens: pedido.map(item => {
+      if (item.nome.startsWith("Massa")) {
+        return {
+          name: item.nome,
+          price: item.preco,
+          quantity: item.quantidade,
+          tipo: item.tipo,
+          molhos: item.molhos,
+          ingredientes: item.ingredientes,
+          acompanhamentos: item.acompanhamentos,
+        };
+      } else {
+        return {
+          name: item.nome,
+          price: item.preco,
+          quantity: item.quantidade,
+        };
+      }
+    }),
     total: total.toFixed(2),
     payment_method: formaPagamento,
     note: observacao || null,
@@ -506,25 +520,25 @@ async function enviarPedido() {
   try {
     // Envia o pedido para o backend usando axios
     const response = await axios.post("https://api.arijolanchesemassas.com.br/api/admin/orders", pedidoBackend);
-  
+
     if (response.status === 201) {
       const orderId = response.data.pedido.id; // Certifique-se de que o backend retorne o ID do pedido
       const trackingLink = response.data.trackingLink;
-  
+
       // Adiciona o link de acompanhamento à mensagem do pedido
       mensagemPedido += `\n🔗 *Acompanhe o status do seu pedido pelo link abaixo:*\n${trackingLink}`;
-  
+
       // Exibe confirmação e limpa os dados
       exibirConfirmacao("Pedido confirmado e enviado com sucesso!");
       pedido = [];
       atualizarResumoPedido();
       atualizarVisibilidadeBotao();
       localStorage.removeItem('pedido'); // Limpa o localStorage
-  
+
       // Abre o WhatsApp com a mensagem gerada
       const urlPedido = `https://api.whatsapp.com/send?phone=5585987764006&text=${encodeURIComponent(mensagemPedido)}`;
       window.open(urlPedido, '_blank');
-      
+
       exibirConfirmacao("Pedido confirmado e enviado para o WhatsApp!");
       cancelarPedido();
 
@@ -536,10 +550,10 @@ async function enviarPedido() {
     }
   } catch (error) {
     console.error("Erro ao enviar o pedido:", error);
-  
+
     // Exibe uma mensagem de erro estilizada para o usuário
     exibirErroEstilizado("Não foi possível enviar o pedido. Tente novamente mais tarde.");
-  }  
+  }
 }
 
 
