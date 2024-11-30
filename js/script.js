@@ -647,7 +647,7 @@ function verificarLimiteIngredientes() {
   const ingredientesSelecionados = document.querySelectorAll('input[name="ingrediente"]:checked');
   const checkboxesIngredientes = document.querySelectorAll('input[name="ingrediente"]');
 
-  if (ingredientesSelecionados.length >= 8) {
+  if (ingredientesSelecionados.length >= 10) {
     // Desabilita os checkboxes não selecionados
     checkboxesIngredientes.forEach(checkbox => {
       if (!checkbox.checked) {
@@ -655,7 +655,7 @@ function verificarLimiteIngredientes() {
       }
     });
   } else {
-    // Habilita todos os checkboxes se a quantidade for menor que 8
+    // Habilita todos os checkboxes se a quantidade for menor que 10
     checkboxesIngredientes.forEach(checkbox => {
       checkbox.disabled = false;
     });
