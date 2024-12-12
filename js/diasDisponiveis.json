@@ -2,7 +2,7 @@
   "segunda": ["hamburguer", "bebidas"],
   "terca": ["hamburguer", "cachorro_quente", "bebidas"],
   "quarta": ["hamburguer", "bebidas"],
-  "quinta": ["hamburguer", "massas", "bebidas"],
+  "quinta": ["hamburguer", "cachorro_quente", "pratinho", "massas", "diversos", "bebidas"],
   "sexta": ["hamburguer", "massas", "bebidas"],
   "sabado": ["hamburguer","bebidas"],
   "domingo": ["hamburguer", "cachorro_quente", "pratinho", "massas", "bebidas"]
