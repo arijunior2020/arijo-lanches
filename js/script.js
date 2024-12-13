@@ -55,14 +55,14 @@ function verificarHorarioDeFuncionamento() {
   console.log(`Loja aberta manualmente: ${lojaAbertaManualmente}`);
 
   // Horário de funcionamento: das 18h às 22h
-  const dentroHorario = horaAtual >= 18 && horaAtual < 22;
+  const dentroHorario = horaAtual >= 10 && horaAtual < 22;
 
   // Verifica o motivo do fechamento
   if (!dentroHorario) {
     exibirBannerLojaFechada("horario");
   } else if (!lojaAbertaManualmente) {
     exibirBannerLojaFechada("manual");
-  } else if (!lojaAbertaSemEntregadores) {
+  } else if (lojaAbertaSemEntregadores) {
     exibirBannerLojaFechada("faltaEntregadores");
   }
 }
