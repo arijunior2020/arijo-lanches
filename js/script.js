@@ -8,7 +8,7 @@ let taxaEntrega = 0;
 let massaAtual = 1;
 let quantidadeMassas = 0;
 // Variável global para controlar a abertura da loja manualmente
-let lojaAbertaManualmente = true; // Define como `true` (aberta) por padrão
+let lojaAbertaManualmente = false; // Define como `true` (aberta) por padrão
 let lojaAbertaSemEntregadores = true; // Define como `false` (com entregadores) por padrão
 
 const botaoFinalizar = document.querySelector('.finalizar-pedido');
