@@ -9,6 +9,7 @@ let massaAtual = 1;
 let quantidadeMassas = 0;
 // Variável global para controlar a abertura da loja manualmente
 let lojaAbertaManualmente = true; // Define como `true` (aberta) por padrão
+let lojaAbertaSemEntregadores = true; // Define como `false` (com entregadores) por padrão
 
 const botaoFinalizar = document.querySelector('.finalizar-pedido');
 
@@ -34,6 +35,10 @@ function exibirBannerLojaFechada(motivo) {
       <strong>Loja Fechada:</strong> A loja está fechada no momento por motivos excepcionais.
       Por favor, volte mais tarde.
     `;
+  } else if (motivo === "faltaEntregadores") {
+    banner.innerHTML = `
+      <strong>Loja Aberta:</strong> Porém estamos em entregadores hoje, venham nos conhecer presencialmente.
+    `;
   }
 
   // Adiciona o banner ao corpo do documento
@@ -50,13 +55,15 @@ function verificarHorarioDeFuncionamento() {
   console.log(`Loja aberta manualmente: ${lojaAbertaManualmente}`);
 
   // Horário de funcionamento: das 18h às 22h
-  const dentroHorario = horaAtual >= 18 && horaAtual < 22;
+  const dentroHorario = horaAtual >= 10 && horaAtual < 22;
 
   // Verifica o motivo do fechamento
   if (!dentroHorario) {
     exibirBannerLojaFechada("horario");
   } else if (!lojaAbertaManualmente) {
     exibirBannerLojaFechada("manual");
+  } else if (!lojaAbertaSemEntregadores) {
+    exibirBannerLojaFechada("faltaEntregadores");
   }
 }
 
